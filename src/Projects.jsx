@@ -73,11 +73,9 @@ function Projects() {
 >
   Projects
 </Link>
-<Link to="/ #contact"
-  tabIndex={menuOpen ? 0 : -1}
-  onClick={() => setMenuOpen(false)}>
-          Contact Us
-        </Link>
+<Link to="/#contact" className="contact-link">
+  Contact Us
+</Link>
 </aside>
 
         <h1 className="projects-title">
