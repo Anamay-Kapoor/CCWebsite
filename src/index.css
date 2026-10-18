@@ -1106,6 +1106,15 @@ body {
   background: var(--panel);
   border: 1px solid var(--border);
   border-radius: 18px;
+  transition:background 0.2s ease ;
+  transition:box-shadow 0.3s ease-out;
+}
+.listing-card:hover{
+  background: rgba(85, 186, 255, 0.08);
+  box-shadow:0 0 8px rgb(0, 71, 118) ;
+}
+.listing-card:hover .listing-image{
+  background: rgba(85, 186, 255, 0.08);
 }
 
 .listing-image {
@@ -1116,6 +1125,7 @@ body {
   color: var(--muted);
   background: rgba(8, 12, 24, 0.8);
   border-bottom: 1px solid var(--border);
+  transition:background 0.2s ease ;
 }
 
 .listing-content {

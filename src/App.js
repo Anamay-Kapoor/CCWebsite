@@ -4,11 +4,26 @@ import ReactDOM from 'react-dom/client';
 import TextType from './TextType';
 import BackgroundText from './randombgtext'; 
 import DotGrid from './DotGrid';
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link ,useLocation } from 'react-router-dom';
 import Projects from './Projects';
 function Home() {
+const location = useLocation();
+
+
 const [menuOpen, setMenuOpen] = React.useState(false);
 const [loading, setLoading] = React.useState(true);
+React.useEffect(() => {
+  if (!location.hash) return;
+
+  const id = location.hash.slice(1);
+
+  requestAnimationFrame(() => {
+    document.getElementById(id)?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
+  });
+}, [location.pathname, location.hash]);
 
 React.useEffect(() => {/*loader code*/
   let timer;
