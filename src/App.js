@@ -234,6 +234,7 @@ React.useEffect(() => {/*loader code*/
    
   );
 }
+/*router  stuff*/
 function App() {
   return (
     <BrowserRouter>
