@@ -214,7 +214,7 @@ React.useEffect(() => {/*loader code*/
                   
                   <p className="listing-description">
                     Coding Club's Time Table Generator
-                    <span className="listing-link-text"><Link to="" className='listing-link'>
+                    <span className="listing-link-text"><Link to="/Project-pages/Timetable-generator" className='listing-link'>
                       View Project→
                       </Link>
                     </span>
