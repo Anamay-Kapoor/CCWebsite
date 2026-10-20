@@ -4,8 +4,36 @@ import './index.css';
 import TextType from './TextType';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 function Projects() {
+  const [search, setSearch] = React.useState('');
+  const [vertical, setVertical] = React.useState('all');
     const [menuOpen, setMenuOpen] = React.useState(false);
     const [loading, setLoading] = React.useState(true);
+    /*filter*/
+    const projects = [
+  {
+    name: 'TimeTable Generator',
+    vertical: 'webdev',
+    verticalLabel: 'WebDev Vertical',
+    languages: ['React', 'Golang'],
+    description: "Coding Club's Time Table Generator",
+    path: '/projects/timetable-generator'
+  }
+];
+  const filteredProjects = projects.filter((project) => {
+  const query = search.trim().toLowerCase();
+
+  const text = [
+    project.name,
+    project.description,
+    project.verticalLabel,
+    ...project.languages
+  ].join(' ').toLowerCase();
+
+  return (
+    text.includes(query) &&
+    (vertical === 'all' || project.vertical === vertical)
+  );
+});
     React.useEffect(() => {/*loader code*/
       let timer;
     
@@ -102,32 +130,60 @@ function Projects() {
       <main className="projects-main">
         <div className="project-controls">
           <input
-            type="search"
-            placeholder="Search projects..."
-            aria-label="Search projects"
-          />
+          type="search"
+          placeholder="Search projects..."
+          aria-label="Search projects"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+/>
 
-          <select defaultValue="all" aria-label="Filter by vertical">
+          <select defaultValue="all" aria-label="Filter by vertical"
+          value={vertical}
+          onChange={(e) => setVertical(e.target.value)}>
             <option value="all">All Verticals</option>
-            <option value="frontend">WebDev</option>
+            <option value="webdev">WebDev</option>
             <option value="ai-ml">AI / ML</option>
-            <option value="robotics">GameDev</option>
+            <option value="gamedev">GameDev</option>
           </select>
         </div>
 
-        <section className="project-grid">
-          <article className="listing-card">
-            <div className="listing-image">Image</div>
+      <section className="project-grid">
+  {filteredProjects.map((project) => (
+    <article className="listing-card" key={project.path}>
+      <div className="listing-image">{project.name}</div>
 
-            <div className="listing-content">
-              <p className="listing-vertical">Vertical</p>
-              <h2>Project Name</h2>
-              <p className="listing-description">
-                Project description
-              </p>
-            </div>
-          </article>
-        </section>
+      <div className="listing-content">
+        <p className="listing-vertical">{project.verticalLabel}</p>
+
+        <h2>{project.name}</h2>
+
+        <h3 className="language-container">
+          {project.languages.map((language) => (
+            <span className="language-box" key={language}>
+              {language}
+            </span>
+          ))}
+        </h3>
+
+        <p className="listing-description">
+          {project.description}
+        </p>
+
+        <div className="listing-link-text">
+          <Link to={project.path} className="listing-link">
+            View Project →
+          </Link>
+        </div>
+      </div>
+    </article>
+  ))}
+
+  {filteredProjects.length === 0 && (
+    <p className="empty-projects">
+      No projects match your search.
+    </p>
+  )}
+</section>
       </main>
     </div>
   );

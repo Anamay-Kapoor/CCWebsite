@@ -174,11 +174,12 @@ React.useEffect(() => {/*loader code*/
   </section>
 
   <section id="bulletin" className="bulletin">
-    <h2 className="section-title">Bulletin</h2>
+    <h2 className="section-title">Latest Updates</h2>
 
-    <details className="bulletin-drop">
-      <summary>Latest update</summary>
-      <p>Update</p>
+    <details className="bulletin-drop" id="bulletin">
+      <summary>New Project : TimeTable Generator</summary>
+      <p>Check out our Timetable Generator : <a href='#projects' className="bulletin-link">Click here</a></p>
+   
     </details>
   </section>
 
@@ -201,15 +202,28 @@ React.useEffect(() => {/*loader code*/
   <section id="projects" className="projects">
     <h2 className="section-title">Projects</h2>
 
-    <div className="project-list">
-      <div className="project-card">
-        <h3>Project</h3>
-      </div>
-    </div>
+    <article className="listing-card">
+                <div className="listing-image">TimeTable Generator</div>
+    
+                <div className="listing-content">
+                  <p className="listing-vertical">WebDev Vertical</p>
+                  <h2>TimeTable Generator</h2>
+                  <h3 className='language-container'><span className='language-box'>React</span><span className='language-box'>Golang</span></h3>
+                  
+                  
+                  <p className="listing-description">
+                    Coding Club's Time Table Generator
+                    <span className="listing-link-text"><Link to="" className='listing-link'>
+                      View Project→
+                      </Link>
+                    </span>
+                  </p>
+                </div>
+              </article>
   </section>
 </main>
 <section id="contact" className="contact">
-  <h2 className="section-title">CONTACT US</h2>
+  <h2 className="section-title">Contact Us</h2>
 
   <form className="contact-form">
     <div className="contact-field">

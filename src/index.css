@@ -403,7 +403,7 @@ main {
   width: min(1100px, calc(100% - 40px));
   margin: 0 auto 28px;
   scroll-margin-top: 110px;
-  
+   font-family: Roboto, Arial, sans-serif;
 }
 
 .bulletin,
@@ -412,6 +412,16 @@ main {
   background: rgba(11, 16, 32, 0.42);
   border: 1px solid var(--border);
   border-radius: 20px;
+   font-family: Roboto, Arial, sans-serif;
+}
+.bulletin-link{
+  transition:color 0.2s ease;
+  
+  color:#55baff;
+  font-family: Roboto, Arial, sans-serif;
+}
+.bulletin-link:hover{
+  color:#0099fe;
 }
 
 .section-title {
@@ -420,6 +430,7 @@ main {
   font-size: clamp(1.5rem, 3vw, 2rem);
   font-weight: 650;
   letter-spacing: -0.025em;
+  padding-bottom:25px;
 }
 
 .bulletin {
@@ -733,12 +744,15 @@ body {
   background: rgba(11, 16, 32, 0.7);
   border: 1px solid var(--border);
   border-radius: 14px;
+  
 }
+
 
 .bulletin-drop summary {
   color: white;
   cursor: pointer;
   font-weight: 500;
+  
 }
 
 .bulletin-drop summary::marker {
@@ -1136,18 +1150,42 @@ body {
   margin: 0 0 10px;
   color: #55baff;
   font-size: 0.85rem;
+  font-family: Roboto, Arial, sans-serif;
 }
 
 .listing-content h2 {
   margin: 0 0 12px;
   color: var(--text);
   font-size: 1.25rem;
+  font-family: Roboto, Arial, sans-serif;
 }
 
 .listing-description {
   margin: 0;
   color: var(--muted);
   line-height: 1.6;
+  font-family: Roboto, Arial, sans-serif;
+  
+}
+.listing-link{
+  padding-left:65%;
+  justify-self: right;
+  color:#55baff;
+  font-family: Roboto, Arial, sans-serif;
+}
+.language-container{
+  gap:25px;
+  display:flex;
+  flex-direction: row;
+}
+.language-box{
+  font-size:13px;
+  padding:6px 10px;
+  border:2px solid rgba(52, 51, 51, 0.271);
+  background:rgba(24, 25, 29, 0.72) ;
+  border-radius: 10px;
+  font-family: Roboto, Arial, sans-serif;
+  
 }
 
 @media (max-width: 600px) {
