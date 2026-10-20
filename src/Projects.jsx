@@ -16,7 +16,7 @@ function Projects() {
     verticalLabel: 'WebDev Vertical',
     languages: ['React', 'Golang'],
     description: "Coding Club's Time Table Generator",
-    path: '/projects/timetable-generator'
+    path: '/Project-pages/Timetable-generator'
   }
 ];
   const filteredProjects = projects.filter((project) => {
@@ -167,13 +167,12 @@ function Projects() {
 
         <p className="listing-description">
           {project.description}
-        </p>
-
-        <div className="listing-link-text">
           <Link to={project.path} className="listing-link">
             View Project →
           </Link>
-        </div>
+        </p>
+
+       
       </div>
     </article>
   ))}

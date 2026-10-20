@@ -6,6 +6,7 @@ import BackgroundText from './randombgtext';
 import DotGrid from './DotGrid';
 import { BrowserRouter, Routes, Route, Link ,useLocation } from 'react-router-dom';
 import Projects from './Projects';
+import TimeTableGen from './Project-pages/Timetable-generator';
 function Home() {
 const location = useLocation();
 
@@ -270,6 +271,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/projects" element={<Projects />} />
+         <Route path="/Project-pages/Timetable-generator" element={<TimeTableGen />}
+  />
       </Routes>
     </BrowserRouter>
   );
