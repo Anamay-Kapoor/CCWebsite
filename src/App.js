@@ -141,26 +141,28 @@ React.useEffect(() => {/*loader code*/
   <main>
   
   <section className="hero">
-    
+    <img
+      className="hero-art"
+      src="/cc-mark.png"
+      alt="Coding Club cube mark with code brackets"
+    />
     <h1 className="hero-title">
-         <TextType
-  text={["Coding Club", "Happy coding!"]}
-  typingSpeed={50}
-  pauseDuration={1500}
-  deletingSpeed={80}
-  deleteMode="backspace"
-  typeEffect="fade"
-  mistakes={0}
-  cursorStyle="underscore"
-  cursorGlide
-  showCursor
-  variableSpeed
-  cursorColor="#ffffff"
-  prefixColor="currentColor"
-  cursorBlinkDuration={0.5}
-  cursorCharacter="_"
-  prefix=""
-/></h1>
+      <TextType
+        as="span"
+        text={["Coding Club", "BITS Pilani"]}
+        typingSpeed={90}
+        pauseDuration={1600}
+        deletingSpeed={55}
+        deleteMode="backspace"
+        typeEffect="fade"
+        mistakes={0}
+        cursorStyle="underscore"
+        cursorGlide
+        showCursor
+        cursorColor="#ffffff"
+        cursorBlinkDuration={0.5}
+      />
+    </h1>
    
 
     <div className="hero-actions">

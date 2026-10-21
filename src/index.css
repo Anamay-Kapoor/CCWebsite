@@ -359,6 +359,8 @@ main {
 }
 
 .hero-title {
+  width: max-content;
+  max-width: calc(100vw - 32px);
   margin: 0 0 40px;
   font-size:100px;
   font-weight: 750;
@@ -654,6 +656,33 @@ body {
   -webkit-background-clip: text;
   color: transparent;
   -webkit-text-fill-color: transparent;
+  padding: 0 0.24em 0.2em;
+  box-sizing: border-box;
+  overflow: visible;
+}
+
+/* TextType renders each character inside nested spans, so give that span its
+   own text gradient instead of relying on the heading's clipped background. */
+.hero-title .text-type__content > span:not(.text-type__caret) {
+  background: linear-gradient(100deg, #ffffff 10%, #55baff 55%, #ffbd68 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-art {
+  display: block;
+  width: clamp(180px, 22vw, 260px);
+  max-width: calc(100vw - 48px);
+  height: auto;
+  margin: 0 0 22px;
+  animation: hero-art-levitate 6s ease-in-out infinite;
+}
+
+@keyframes hero-art-levitate {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
 }
 
 .hero-actions {
@@ -937,6 +966,10 @@ body {
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+
+  .hero-art {
+    animation: none;
   }
 
   .hero-btn,
