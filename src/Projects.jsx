@@ -10,7 +10,19 @@ function Projects() {
     const [loading, setLoading] = React.useState(true);
     /*filter*/
     const projects = [
+      {
+    image: '/railway_rome.png',
+    name: 'Railway To Rome',
+    vertical: 'gamedev',
+    verticalLabel: 'GameDev Vertical',
+    languages: ['Tower Defense', 'FPS Combat','Auto/Manual','Low Poly World'],
+    description: "Coding Club's Time Table Generator",
+    path: '/Project-pages/Timetable-generator'
+  },
+      
+      
   {
+    image: '/main_logo.jpeg',
     name: 'TimeTable Generator',
     vertical: 'webdev',
     verticalLabel: 'WebDev Vertical',
@@ -23,6 +35,7 @@ function Projects() {
   const query = search.trim().toLowerCase();
 
   const text = [
+    
     project.name,
     project.description,
     project.verticalLabel,
@@ -150,7 +163,7 @@ function Projects() {
       <section className="project-grid">
   {filteredProjects.map((project) => (
     <article className="listing-card" key={project.path}>
-      <div className="listing-image">{project.name}</div>
+      <div className="listing-image"><img src={project.image} alt={project.name} /></div>
 
       <div className="listing-content">
         <p className="listing-vertical">{project.verticalLabel}</p>
