@@ -1,280 +1,371 @@
 import './index.css';
-import React from 'react';
-import ReactDOM from 'react-dom/client';
+import React, { useEffect, useRef, useState } from 'react';
+import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
 import TextType from './TextType';
-import BackgroundText from './randombgtext'; 
-import DotGrid from './DotGrid';
-import { BrowserRouter, Routes, Route, Link ,useLocation } from 'react-router-dom';
+import BackgroundText from './randombgtext';
 import Projects from './Projects';
 import TimeTableGen from './Project-pages/Timetable-generator';
-function Home() {
-const location = useLocation();
+import {
+  gsap,
+  ScrollTrigger,
+  useGSAP,
+  Background,
+  Cursor,
+  SiteMenu,
+  SectionHead,
+  useMagnetic,
+  useTilt,
+  prefersReduced,
+} from './ui';
 
+const HERO_WORDS = ['Coding Club', 'BITS Pilani'];
+const TAPE_WORDS = ['React', 'Golang', 'Hackathons', 'Open Source', 'AI / ML', 'GameDev', 'Web Dev', 'Linux', 'CP', 'Systems'];
+let hasBooted = false;
 
-const [menuOpen, setMenuOpen] = React.useState(false);
-const [loading, setLoading] = React.useState(true);
-React.useEffect(() => {
-  if (!location.hash) return;
+/* ---------- Route scroll handling ---------- */
+function ScrollManager() {
+  const { pathname, hash } = useLocation();
 
-  const id = location.hash.slice(1);
+  useEffect(() => {
+    if (hash) {
+      const id = hash.slice(1);
+      requestAnimationFrame(() => {
+        document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+  }, [pathname, hash]);
 
-  requestAnimationFrame(() => {
-    document.getElementById(id)?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start'
-    });
-  });
-}, [location.pathname, location.hash]);
+  return null;
+}
 
-React.useEffect(() => {/*loader code*/
-  let timer;
+/* ---------- Boot loader (first visit only) ---------- */
+function BootLoader({ onDone }) {
+  const root = useRef(null);
 
-  const hideLoader = () => {
-    timer = window.setTimeout(() => setLoading(false), 500);
-  };
+  useGSAP(() => {
+    const fast = prefersReduced();
+    const tl = gsap.timeline({ onComplete: onDone });
 
-  if (document.readyState === "complete") {
-    hideLoader();
-  } else {
-    window.addEventListener("load", hideLoader, { once: true });
-  }
+    tl.from('.boot-line', {
+      opacity: 0, x: -14, stagger: fast ? 0.05 : 0.18, duration: 0.25, ease: 'power2.out',
+    })
+      .to('.boot-bar-fill', { scaleX: 1, duration: fast ? 0.2 : 0.8, ease: 'power3.inOut' }, '<0.2')
+      .add(() => {
+        if (document.readyState !== 'complete') {
+          tl.pause();
+          window.addEventListener('load', () => tl.play(), { once: true });
+        }
+      })
+      .to(root.current, {
+        clipPath: 'inset(0 0 100% 0)', duration: fast ? 0.2 : 0.8, ease: 'expo.inOut',
+      }, '+=0.15');
+  }, { scope: root });
 
-  return () => {
-    window.removeEventListener("load", hideLoader);
-    window.clearTimeout(timer);
-  };
-}, []);
   return (
-    
-
-   <div className="gradient-bg" id="home">
-    {loading && (
-  <div className="loader-screen" role="status">
-    <div className="loader-spinner"></div>
-    <span>Loading</span>
-  </div>
-)}
-   {/*}  <DotGrid
-    baseColor="#3a3446"
-    activeColor="#ffffff"
-    shape="circle"
-    dotSize={5}
-    gap={18}
-    proximity={140}
-    strength={1}
-    bounce={0.6}
-    tension={0.4}
-    returnDuration={0.8}
-    shockRadius={320}
-    shockStrength={5}
-    swell={0.8}
-    stretch={0.5}
-    glow={0.5}
-    fade={0}
-    intro
-    opacity={1}
-    mouseInteraction
-    clickShock
-/>Its here, refuses to work ignore*/}
-      <BackgroundText/>
-      
-    
-     
-     <head>
-
-      
-      
-      <link rel="icon" type="image/jpeg" href="/main_logo.jpeg" /> 
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Coding Club</title>
-
-    </head>
-
-    <button
-  className="menu-toggle"
-  type="button"
-  aria-label={menuOpen ? "Close menu" : "Open menu"}
-  aria-expanded={menuOpen}
-  onClick={() => setMenuOpen(!menuOpen)}
->
-  <span></span>
-  <span></span>
-  <span></span>
-</button>
-<button
-  className={`sidebar-backdrop ${menuOpen ? "visible" : ""}`}
-  type="button"
-  aria-label="Close menu"
-  tabIndex={menuOpen ? 0 : -1}
-  onClick={() => setMenuOpen(false)}
-></button>
-
-<aside
-  className={`sidebar ${menuOpen ? "sidebar-open" : ""}`}
-  aria-hidden={!menuOpen}
->
-  <a
-    href="#home"
-    tabIndex={menuOpen ? 0 : -1}
-    onClick={() => setMenuOpen(false)}
-  >
-    Home
-  </a>
-
- <Link
-  to="/projects"
-  tabIndex={menuOpen ? 0 : -1}
-  onClick={() => setMenuOpen(false)}
->
-  Projects
-</Link>
-
-  <a
-    href="#contact"
-    tabIndex={menuOpen ? 0 : -1}
-    onClick={() => setMenuOpen(false)}
-  >
-    Contact Us
-  </a>
-</aside>
-
-  <main>
-  
-  <section className="hero">
-    <img
-      className="hero-art"
-      src="/cc-mark.png"
-      alt="Coding Club cube mark with code brackets"
-    />
-    <h1 className="hero-title">
-      <TextType
-        as="span"
-        text={["Coding Club", "BITS Pilani"]}
-        typingSpeed={90}
-        pauseDuration={1600}
-        deletingSpeed={55}
-        deleteMode="backspace"
-        typeEffect="fade"
-        mistakes={0}
-        cursorStyle="underscore"
-        cursorGlide
-        showCursor
-        cursorColor="#ffffff"
-        cursorBlinkDuration={0.5}
-      />
-    </h1>
-   
-
-    <div className="hero-actions">
-      <a href="#bulletin" className="hero-btn bulletin-btn">
-        View Bulletin
-      </a>
-      <Link to="/projects" className="hero-btn project-btn">
-  Explore Projects
-</Link>
-    </div>
-    
-  </section>
-
-  <section id="bulletin" className="bulletin">
-    <h2 className="section-title">Latest Updates</h2>
-
-    <details className="bulletin-drop" id="bulletin">
-      <summary>New Project : TimeTable Generator</summary>
-      <p>Check out our Timetable Generator : <a href='#projects' className="bulletin-link">Click here</a></p>
-   
-    </details>
-  </section>
-
-  <section className="events">
-    <div className="event-card upcoming">
-      <h2>Upcoming Events</h2>
-      <div className="event-items">
-        <div className="event-item">Event</div>
+    <div className="boot" ref={root} role="status" aria-label="Loading">
+      <div className="boot-box">
+        <p className="boot-line"><span>$</span> init coding_club.sys</p>
+        <p className="boot-line"><span>$</span> load modules [react, golang, caffeine]</p>
+        <p className="boot-line"><span>$</span> compile ideas ........ <b>OK</b></p>
+        <p className="boot-line"><span>$</span> welcome, human_</p>
+        <div className="boot-bar"><div className="boot-bar-fill" /></div>
       </div>
     </div>
-
-    <div className="event-card running">
-      <h2>Running Events</h2>
-      <div className="event-items">
-        <div className="event-item">Event</div>
-      </div>
-    </div>
-  </section>
-
-  <section id="projects" className="projects">
-    <h2 className="section-title">Projects</h2>
-
-    <article className="listing-card">
-                <div className="listing-image">TimeTable Generator</div>
-    
-                <div className="listing-content">
-                  <p className="listing-vertical">WebDev Vertical</p>
-                  <h2>TimeTable Generator</h2>
-                  <h3 className='language-container'><span className='language-box'>React</span><span className='language-box'>Golang</span></h3>
-                  
-                  
-                  <p className="listing-description">
-                    Coding Club's Time Table Generator
-                    <span className="listing-link-text"><Link to="/Project-pages/Timetable-generator" className='listing-link'>
-                      View Project→
-                      </Link>
-                    </span>
-                  </p>
-                </div>
-              </article>
-  </section>
-</main>
-<section id="contact" className="contact">
-  <h2 className="section-title">Contact Us</h2>
-
-  <form className="contact-form">
-    <div className="contact-field">
-      <label htmlFor="contact-name">Name</label>
-      <input
-        type="text"
-        id="contact-name"
-        placeholder="Your name"
-      />
-    </div>
-
-    <div className="contact-field">
-      <label htmlFor="contact-email">Email</label>
-      <input
-        type="email"
-        id="contact-email"
-        placeholder="Your email address"
-      />
-    </div>
-
-    <div className="contact-field">
-      <label htmlFor="contact-description">Description</label>
-      <textarea
-        id="contact-description"
-        placeholder="Write your message..."
-        rows="5"
-      ></textarea>
-    </div>
-
-    <button type="button" className="contact-btn">
-      Submit
-    </button>
-  </form>
-</section>
-
-   </div>
-   
   );
 }
-/*router  stuff*/
+
+function HudClock() {
+  const [now, setNow] = useState(() => new Date());
+
+  useEffect(() => {
+    const id = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  return <>{now.toLocaleTimeString('en-IN', { hour12: false, timeZone: 'Asia/Kolkata' })} IST</>;
+}
+
+/* ---------- Home ---------- */
+function Home() {
+  const root = useRef(null);
+  const [booted, setBooted] = useState(hasBooted);
+
+  const magBulletin = useMagnetic();
+  const magProjects = useMagnetic();
+  const magSubmit = useMagnetic(0.25);
+  const tiltUpcoming = useTilt(6);
+  const tiltRunning = useTilt(6);
+  const tiltProject = useTilt(6);
+
+  useGSAP(() => {
+    if (!booted) return;
+    const mm = gsap.matchMedia();
+
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      // Hero intro
+      gsap.timeline({ defaults: { ease: 'expo.out' } })
+        .from('.hero-art', { scale: 0.3, opacity: 0, rotate: -30, duration: 1.4 })
+        .from('.orbit', { scale: 0, opacity: 0, stagger: 0.1, duration: 1.2 }, '<0.1')
+        .from('.hero-title', { yPercent: 60, opacity: 0, filter: 'blur(14px)', duration: 1.2 }, '-=1')
+        .from('.hero-tag', { y: 20, opacity: 0, duration: 0.9 }, '-=0.8')
+        .from('.hero-actions .btn', { y: 30, opacity: 0, stagger: 0.12, duration: 0.9 }, '-=0.7')
+        .from('.hud, .scroll-cue', { opacity: 0, stagger: 0.08, duration: 0.6 }, '-=0.6');
+
+      // Hero drifts out on scroll
+      gsap.to('.hero-inner', {
+        yPercent: -18,
+        opacity: 0,
+        ease: 'none',
+        scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true },
+      });
+
+      // Crossing tapes, faster when scrolling
+      const loopA = gsap.to('.tape-track-a', { xPercent: -50, ease: 'none', duration: 26, repeat: -1 });
+      const loopB = gsap.fromTo('.tape-track-b', { xPercent: -50 }, { xPercent: 0, ease: 'none', duration: 30, repeat: -1 });
+
+      ScrollTrigger.create({
+        onUpdate: (self) => {
+          const boost = gsap.utils.clamp(1, 6, 1 + Math.abs(self.getVelocity()) / 350);
+          [loopA, loopB].forEach((loop) => {
+            gsap.to(loop, {
+              timeScale: boost,
+              duration: 0.2,
+              overwrite: true,
+              onComplete: () => gsap.to(loop, { timeScale: 1, duration: 1.2 }),
+            });
+          });
+        },
+      });
+
+      // Section lines draw in
+      gsap.utils.toArray('.section-line').forEach((line) => {
+        gsap.fromTo(line, { scaleX: 0 }, {
+          scaleX: 1,
+          ease: 'none',
+          scrollTrigger: { trigger: line, start: 'top 92%', end: 'top 60%', scrub: true },
+        });
+      });
+
+      // Generic reveals
+      gsap.utils.toArray('.reveal').forEach((el) => {
+        gsap.from(el, {
+          y: 70,
+          opacity: 0,
+          duration: 1.1,
+          ease: 'power3.out',
+          scrollTrigger: { trigger: el, start: 'top 88%' },
+        });
+      });
+
+      gsap.from('.event-card', {
+        y: 80,
+        opacity: 0,
+        stagger: 0.15,
+        duration: 1.1,
+        ease: 'power3.out',
+        scrollTrigger: { trigger: '.events-grid', start: 'top 85%' },
+      });
+
+      gsap.from('.contact-field, .contact-form .btn', {
+        y: 30,
+        opacity: 0,
+        stagger: 0.08,
+        duration: 0.8,
+        ease: 'power3.out',
+        scrollTrigger: { trigger: '.contact-form', start: 'top 85%' },
+      });
+    });
+
+    ScrollTrigger.refresh();
+  }, { scope: root, dependencies: [booted] });
+
+  const tapeWords = [...TAPE_WORDS, ...TAPE_WORDS];
+
+  return (
+    <div className="site" id="home" ref={root}>
+      {!booted && (
+        <BootLoader onDone={() => { hasBooted = true; setBooted(true); }} />
+      )}
+
+      <BackgroundText />
+
+      <main>
+        {/* ---------- HERO ---------- */}
+        <section className="hero">
+          <div className="hero-hud" aria-hidden="true">
+            <span className="hud hud-tl"><i className="pulse" /> SYSTEM ONLINE</span>
+            <span className="hud hud-tr">28.36°N · 75.59°E</span>
+            <span className="hud hud-bl"><HudClock /></span>
+            <span className="hud hud-br">BUILD // 2026.10</span>
+          </div>
+
+          <div className="hero-inner">
+            <div className="hero-art-wrap">
+              <span className="orbit" />
+              <span className="orbit orbit-2" />
+              <img className="hero-art" src="/cc-mark.png" alt="Coding Club cube mark with code brackets" />
+            </div>
+
+            <h1 className="hero-title">
+              <TextType
+                as="span"
+                text={HERO_WORDS}
+                typingSpeed={90}
+                pauseDuration={1600}
+                deletingSpeed={55}
+                deleteMode="backspace"
+                typeEffect="fade"
+                mistakes={0}
+                cursorStyle="underscore"
+                cursorGlide
+                showCursor
+                cursorColor="#d4ff3a"
+                cursorBlinkDuration={0.5}
+              />
+            </h1>
+
+            <p className="hero-tag"><span>&gt;_</span> build. break. ship. repeat.</p>
+
+            <div className="hero-actions">
+              <a ref={magBulletin} href="#bulletin" className="btn btn-primary">
+                View Bulletin
+              </a>
+              <Link ref={magProjects} to="/projects" className="btn">
+                Explore Projects <span aria-hidden="true">→</span>
+              </Link>
+            </div>
+          </div>
+
+          <div className="scroll-cue" aria-hidden="true"><span>scroll</span><i /></div>
+        </section>
+
+        {/* ---------- TAPES ---------- */}
+        <div className="tape-zone" aria-hidden="true">
+          <div className="tape tape-dark">
+            <div className="tape-track tape-track-b">
+              {tapeWords.map((w, i) => <span key={i}>{w} /</span>)}
+            </div>
+          </div>
+          <div className="tape tape-accent">
+            <div className="tape-track tape-track-a">
+              {tapeWords.map((w, i) => <span key={i}>{w} ✦</span>)}
+            </div>
+          </div>
+        </div>
+
+        {/* ---------- BULLETIN ---------- */}
+        <section id="bulletin" className="section">
+          <SectionHead index="01" title="Latest Updates" />
+          <div className="panel corners reveal">
+            <details className="bulletin-drop">
+              <summary>
+                <span className="chip chip-solid">NEW</span>
+                New Project : TimeTable Generator
+              </summary>
+              <p>
+                Check out our Timetable Generator :{' '}
+                <a href="#projects" className="text-link">Click here</a>
+              </p>
+            </details>
+          </div>
+        </section>
+
+        {/* ---------- EVENTS ---------- */}
+        <section className="section">
+          <SectionHead index="02" title="Events" />
+          <div className="events-grid">
+            <div ref={tiltUpcoming} className="event-card tilt">
+              <div className="event-card-head">
+                <h3>Upcoming Events</h3>
+                <span className="chip">queued</span>
+              </div>
+              <div className="event-items">
+                <div className="event-item">Event</div>
+              </div>
+            </div>
+
+            <div ref={tiltRunning} className="event-card tilt">
+              <div className="event-card-head">
+                <h3>Running Events</h3>
+                <span className="chip chip-live"><i className="pulse" /> live</span>
+              </div>
+              <div className="event-items">
+                <div className="event-item">Event</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ---------- PROJECTS ---------- */}
+        <section id="projects" className="section">
+          <SectionHead index="03" title="Projects" />
+          <article ref={tiltProject} className="listing-card tilt reveal">
+            <div className="listing-image">
+              <span className="listing-scan" aria-hidden="true" />
+              <span className="listing-image-text">TimeTable Generator</span>
+            </div>
+            <div className="listing-content">
+              <p className="listing-vertical">WebDev Vertical</p>
+              <h2>TimeTable Generator</h2>
+              <div className="language-container">
+                <span className="language-box">React</span>
+                <span className="language-box">Golang</span>
+              </div>
+              <p className="listing-description">
+                Coding Club's Time Table Generator
+                <Link to="/Project-pages/Timetable-generator" className="listing-link">
+                  View Project →
+                </Link>
+              </p>
+            </div>
+          </article>
+        </section>
+
+        {/* ---------- CONTACT ---------- */}
+        <section id="contact" className="section">
+          <SectionHead index="04" title="Contact Us" />
+          <form className="panel corners contact-form" onSubmit={(e) => e.preventDefault()}>
+            <div className="contact-field">
+              <label htmlFor="contact-name">Name</label>
+              <input type="text" id="contact-name" placeholder="Your name" />
+            </div>
+            <div className="contact-field">
+              <label htmlFor="contact-email">Email</label>
+              <input type="email" id="contact-email" placeholder="Your email address" />
+            </div>
+            <div className="contact-field contact-field-full">
+              <label htmlFor="contact-description">Description</label>
+              <textarea id="contact-description" placeholder="Write your message..." rows="5" />
+            </div>
+            <button ref={magSubmit} type="button" className="btn btn-primary">
+              Submit <span aria-hidden="true">↗</span>
+            </button>
+          </form>
+        </section>
+      </main>
+
+      <footer className="footer">
+        <span>© {new Date().getFullYear()} Coding Club, BITS Pilani</span>
+        <span className="footer-mono">made with &lt;/&gt; &amp; caffeine</span>
+      </footer>
+    </div>
+  );
+}
+
+/* ---------- App ---------- */
 function App() {
   return (
     <BrowserRouter>
+      <ScrollManager />
+      <Background />
+      <Cursor />
+      <SiteMenu />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/projects" element={<Projects />} />
-         <Route path="/Project-pages/Timetable-generator" element={<TimeTableGen />}
-  />
+        <Route path="/Project-pages/Timetable-generator" element={<TimeTableGen />} />
       </Routes>
     </BrowserRouter>
   );
