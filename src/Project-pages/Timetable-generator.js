@@ -51,7 +51,7 @@ function TimeTableGen() {
           <dl className="detail-meta">
             <div><dt>Vertical</dt><dd>{PROJECT.vertical}</dd></div>
             <div><dt>Stack</dt><dd>{PROJECT.stack.join(' + ')}</dd></div>
-            <div><dt>Built by</dt><dd>Coding Club, BITS Pilani</dd></div>
+           
           </dl>
         </section>
 

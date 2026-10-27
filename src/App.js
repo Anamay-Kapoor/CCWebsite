@@ -195,16 +195,16 @@ function Home() {
         {/* ---------- HERO ---------- */}
         <section className="hero">
           <div className="hero-hud" aria-hidden="true">
-            <span className="hud hud-tl"><i className="pulse" /> SYSTEM ONLINE</span>
-            <span className="hud hud-tr">28.36°N · 75.59°E</span>
+          
+           
             <span className="hud hud-bl"><HudClock /></span>
-            <span className="hud hud-br">BUILD // 2026.10</span>
+            
           </div>
 
           <div className="hero-inner">
             <div className="hero-art-wrap">
               <span className="orbit" />
-              <span className="orbit orbit-2" />
+            
               <img className="hero-art" src="/cc-mark.png" alt="Coding Club cube mark with code brackets" />
             </div>
 
@@ -226,7 +226,7 @@ function Home() {
               />
             </h1>
 
-            <p className="hero-tag"><span>&gt;_</span> build. break. ship. repeat.</p>
+            <p className="hero-tag"><span>&gt;_</span> build. break.</p>
 
             <div className="hero-actions">
               <a ref={magBulletin} href="#bulletin" className="btn btn-primary">
@@ -238,22 +238,11 @@ function Home() {
             </div>
           </div>
 
-          <div className="scroll-cue" aria-hidden="true"><span>scroll</span><i /></div>
+        
         </section>
 
         {/* ---------- TAPES ---------- */}
-        <div className="tape-zone" aria-hidden="true">
-          <div className="tape tape-dark">
-            <div className="tape-track tape-track-b">
-              {tapeWords.map((w, i) => <span key={i}>{w} /</span>)}
-            </div>
-          </div>
-          <div className="tape tape-accent">
-            <div className="tape-track tape-track-a">
-              {tapeWords.map((w, i) => <span key={i}>{w} ✦</span>)}
-            </div>
-          </div>
-        </div>
+       
 
         {/* ---------- BULLETIN ---------- */}
         <section id="bulletin" className="section">
@@ -348,7 +337,7 @@ function Home() {
 
       <footer className="footer">
         <span>© {new Date().getFullYear()} Coding Club, BITS Pilani</span>
-        <span className="footer-mono">made with &lt;/&gt; &amp; caffeine</span>
+       
       </footer>
     </div>
   );
