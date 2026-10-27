@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    { "source": "/admin", "destination": "/index.html" },
+    { "source": "/projects", "destination": "/index.html" },
+    { "source": "/projects/:slug", "destination": "/index.html" },
+    { "source": "/Project-pages/Timetable-generator", "destination": "/index.html" }
+  ]
+}
