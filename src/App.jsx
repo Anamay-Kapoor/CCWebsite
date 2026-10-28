@@ -72,8 +72,9 @@ function BootLoader({ onDone }) {
     <div className="boot" ref={root} role="status" aria-label="Loading">
       <div className="boot-box">
         <p className="boot-line"><span>$</span> init coding_club.sys</p>
-        <p className="boot-line"><span>$</span> load modules [react, golang, caffeine]</p>
-        <p className="boot-line"><span>$</span> compile ideas ........ <b>OK</b></p>
+        <p className="boot-line"><span>$</span> using React</p>
+        <p className="boot-line"><span>$</span> compile some ideas ........ <b>OK</b></p>
+        <p className="boot-line"><span>$</span> commiting changes</p>
         <p className="boot-line"><span>$</span> welcome, human_</p>
         <div className="boot-bar"><div className="boot-bar-fill" /></div>
       </div>
@@ -241,7 +242,7 @@ function Home() {
               />
             </h1>
 
-            <p className="hero-tag"><span>&gt;_</span> build. break.</p>
+            <p className="hero-tag"><span>&gt;_</span> build. break. try to fix. repeat</p>
 
             <div className="hero-actions">
               <a ref={magBulletin} href="#bulletin" className="btn btn-primary">
