@@ -196,7 +196,7 @@ function Home() {
     ScrollTrigger.refresh();
   }, { scope: root, dependencies: [booted] });
 
-  const tapeWords = [...TAPE_WORDS, ...TAPE_WORDS];
+ 
 
   return (
     <div className="site" id="home" ref={root}>
