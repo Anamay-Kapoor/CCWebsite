@@ -24,7 +24,7 @@ import {
 } from './ui';
 
 const HERO_WORDS = ['Coding Club', 'BITS Pilani'];
-const TAPE_WORDS = ['React', 'Golang', 'Hackathons', 'Open Source', 'AI / ML', 'GameDev', 'Web Dev', 'Linux', 'CP', 'Systems'];
+
 let hasBooted = false;
 
 /* ---------- Route scroll handling ---------- */
