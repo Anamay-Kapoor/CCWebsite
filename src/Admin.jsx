@@ -153,7 +153,7 @@ function AdminPanel() {
       setNotice('Event end date must be on or after its start date.'); return;
     }
     const list = editing
-      ? data[section].map((old) => old.id === editing ? item : old)
+      ? (data[section] ?? []).map((old) => old.id === editing ? item : old)
       : [...data[section], item];
     await save({ ...data, [section]: list }, editing ? 'Changes saved.' : 'New entry published.');
   }
@@ -308,9 +308,9 @@ function AdminPanel() {
             </section>
 
             <section className="panel corners">
-              <h2 className="detail-subtitle">Published {SECTIONS[section]} ({data[section].length})</h2>
-              {data[section].length === 0 && <p className="result-count">No entries yet.</p>}
-              {data[section].map((item) => (
+              <h2 className="detail-subtitle">Published {SECTIONS[section]} ({(data[section] ?? []).length})</h2>
+              {(data[section] ?? []).length === 0 && <p className="result-count">No entries yet.</p>}
+              {(data[section] ?? []).map((item) => (
                 <div key={item.id} className="detail-meta" style={{ padding: '18px 0' }}>
                   <div style={{ gap: 12 }}>
                     <span>
