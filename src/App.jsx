@@ -24,6 +24,8 @@ import {
 } from './ui';
 
 const HERO_WORDS = ['Coding Club', 'BITS Pilani'];
+const TAPE_WORDS = ['React', 'Golang', 'Hackathons', 'Open Source', 'AI / ML', 'GameDev', 'Web Dev', 'Linux', 'CP', 'Systems'];
+
 
 let hasBooted = false;
 
@@ -196,7 +198,7 @@ function Home() {
 
     ScrollTrigger.refresh();
   }, { scope: root, dependencies: [booted] });
-
+const tapeWords = [...TAPE_WORDS, ...TAPE_WORDS];
  
 
   return (
@@ -237,7 +239,7 @@ function Home() {
                 cursorStyle="underscore"
                 cursorGlide
                 showCursor
-                cursorColor="#d4ff3a"
+                cursorColor="#f50000"
                 cursorBlinkDuration={0.5}
               />
             </h1>
@@ -258,7 +260,18 @@ function Home() {
         </section>
 
         {/* ---------- TAPES ---------- */}
-       
+       <div className="tape-zone" aria-hidden="true">
+          <div className="tape tape-dark">
+            <div className="tape-track tape-track-b">
+              {tapeWords.map((w, i) => <span key={i}>{w} /</span>)}
+            </div>
+          </div>
+          <div className="tape tape-accent">
+            <div className="tape-track tape-track-a">
+              {tapeWords.map((w, i) => <span key={i}>{w} ✦</span>)}
+            </div>
+          </div>
+        </div>
 
         {/* ---------- BULLETIN ---------- */}
         <section id="bulletin" className="section">

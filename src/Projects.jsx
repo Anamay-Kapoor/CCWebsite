@@ -90,7 +90,7 @@ function Projects() {
               cursorStyle="underscore"
               cursorGlide
               showCursor
-              cursorColor="#d4ff3a"
+              cursorColor="#f50000"
               cursorBlinkDuration={0.5}
             />
           </span>
