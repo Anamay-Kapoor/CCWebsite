@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { gsap, useGSAP, useMagnetic, useTilt, Scramble } from './ui';
 import { useContent, externalLink } from './content';
-import { partNo } from './Projects';
+import { partNo, AutoCover } from './Projects';
 
 const ext = (url) => (externalLink(url) ? { target: '_blank', rel: 'noopener noreferrer' } : {});
 function host(url) {
@@ -117,7 +117,7 @@ function ProjectDetail() {
             {project.image ? (
               <img src={project.image} alt={`${project.name} screenshot`} />
             ) : (
-              <span className="pcard__placeholder">{project.name}<i>_</i></span>
+              <AutoCover project={project} big />
             )}
             <span className="pcard__scan" aria-hidden="true" />
           </div>

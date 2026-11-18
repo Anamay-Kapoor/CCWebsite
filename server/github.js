@@ -43,12 +43,18 @@ async function localWrite(path, bytes, sha) {
 
 const base = 'https://api.github.com';
 
+/*
+ * The database is the `content` branch of the website's own repo (no code on it).
+ * Fixed on purpose: old GH_OWNER / GH_REPO / GH_BRANCH settings are ignored.
+ */
+const DB = { owner: 'Anamay-Kapoor', repo: 'CCWebsite', branch: 'content' };
+
 function settings() {
-  const { GH_OWNER, GH_REPO, GH_BRANCH = 'main', GH_TOKEN } = process.env;
-  if (!GH_OWNER || !GH_REPO || !GH_TOKEN) {
-    throw Object.assign(new Error('GitHub environment variables are missing.'), { status: 503 });
+  const token = process.env.GH_TOKEN;
+  if (!token) {
+    throw Object.assign(new Error('GH_TOKEN is missing. Add it in Vercel → Settings → Environment Variables.'), { status: 503 });
   }
-  return { owner: GH_OWNER, repo: GH_REPO, branch: GH_BRANCH, token: GH_TOKEN };
+  return { ...DB, token };
 }
 
 async function github(method, path, body) {

@@ -29,7 +29,8 @@ Everything that changes often is edited at **`/admin`**, no code needed:
 | Updates  | Announcements on the home page.                                         |
 
 How it works: log in with the admin username and password → edit → **Save**. The change is committed to
-`content/site.json` (images go to `uploads/`) in the GitHub repo set by `GH_REPO`, and
+`content/site.json` (images go to `uploads/`) on the **`content` branch** of this repo, which is
+the site's database: no code, never deployed. The change
 appears on the website within about a minute. A login lasts 12 hours; changing the password logs everyone out.
 
 The first time, the admin may offer to **Import** items that ship with the code
@@ -41,12 +42,18 @@ The first time, the admin may offer to **Import** items that ship with the code
 | ----------------------------- | -------------------------------------------------------------------- |
 | `ADMIN_USERNAME`              | Username for `/admin`.                                               |
 | `ADMIN_PASSWORD`              | Password for `/admin` (8+ characters; use a long one).               |
-| `GH_OWNER`, `GH_REPO`         | Repository that stores the content.                                  |
-| `GH_BRANCH`                   | Branch to write to (default `main`).                                 |
-| `GH_TOKEN`                    | Fine-grained token with **Contents: read & write** on that repo only. |
+| `GH_TOKEN`                    | GitHub token that can write to **Anamay-Kapoor/CCWebsite** (see below). |
 
-Admin saves are commits. `vercel.json` skips rebuilding when a commit only touches
-`content/` or `uploads/`, so saving doesn't redeploy the whole site.
+The database location is fixed in `server/github.js` (`content` branch of this repo); any
+`GH_OWNER` / `GH_REPO` / `GH_BRANCH` variables are ignored.
+
+**Token:** if you own the repo, create a fine-grained token for it with *Contents: Read and write*.
+Collaborators can't make fine-grained tokens for someone else's personal repo; use a classic
+token with the `repo` scope instead.
+
+Admin saves are commits to the `content` branch, so they don't redeploy the site or show up
+in anyone's `git pull` of `main`. Existing images for projects and the team are bundled with the
+code in `public/` and referenced by path; new ones uploaded in the admin go to `uploads/`.
 
 ## Where things live
 
@@ -75,4 +82,4 @@ Admin saves are commits. `vercel.json` skips rebuilding when a commit only touch
 
 Rate limits are per serverless instance. For stronger protection, add a Vercel Firewall rule
 (Project → Firewall) limiting `POST /api/login`, e.g. 20 requests per 10 minutes per IP.
-`GH_TOKEN` should be a fine-grained token scoped to the content repo only.
+`GH_TOKEN` should be a fine-grained token scoped to this repo only, where possible.

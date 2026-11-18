@@ -695,3 +695,43 @@
 @media (max-width: 640px) { .pbar__btn { width: 100%; } }
 .world-panel-body .pbar { margin-bottom: 4px; }
 .world-panel-body .pbar__btn { width: auto; }
+
+/* ---------- auto cover (project without an image) ---------- */
+.autocover {
+  position: absolute; inset: 0;
+  display: grid; place-content: center; justify-items: center; gap: 12px;
+  padding: 24px;
+  overflow: hidden;
+  background: radial-gradient(ellipse 70% 80% at 50% 110%, rgba(245, 0, 0, 0.28), transparent 65%), #0c0c0c;
+  text-align: center;
+}
+.autocover__grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 22px 22px;
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 80%);
+  mask-image: radial-gradient(ellipse at center, #000 30%, transparent 80%);
+}
+.autocover__chip {
+  position: relative;
+  display: grid; place-items: center;
+  width: 64px; height: 64px;
+  border: 1.5px solid var(--accent); border-radius: 14px;
+  background: #140404;
+  box-shadow: 0 0 30px rgba(245, 0, 0, 0.35), inset 0 0 0 4px #0c0c0c, inset 0 0 0 5px rgba(245, 0, 0, 0.35);
+}
+.autocover__chip::before, .autocover__chip::after {
+  content: ""; position: absolute; left: 10px; right: 10px; height: 6px;
+  background: repeating-linear-gradient(90deg, #c9a24a 0 4px, transparent 4px 9px);
+}
+.autocover__chip::before { top: -8px; }
+.autocover__chip::after { bottom: -8px; }
+.autocover__chip b { color: #fff; font: 600 1.3rem/1 var(--display); letter-spacing: -0.02em; }
+.autocover__name { position: relative; max-width: 90%; color: var(--text); font: 600 1.35rem/1.1 var(--display); letter-spacing: -0.02em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.autocover__meta { position: relative; color: var(--dim); font: 500 10.5px/1.3 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; }
+.autocover--big .autocover__chip { width: 96px; height: 96px; border-radius: 18px; }
+.autocover--big .autocover__chip b { font-size: 2rem; }
+.autocover--big .autocover__name { font-size: 2.2rem; }
+.pcard__media:has(.autocover), .ds-screen__view:has(.autocover) { position: relative; }

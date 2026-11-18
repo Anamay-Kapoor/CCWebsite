@@ -14,6 +14,20 @@ function host(url) {
   try { return new URL(url).host; } catch { return ''; }
 }
 
+/* Generated cover for projects without an image: looks intentional, not broken. */
+export function AutoCover({ project, big = false }) {
+  const words = project.name.trim().split(/\s+/);
+  const mono = (words.length > 1 ? words[0][0] + words[1][0] : project.name.slice(0, 2)).toUpperCase();
+  return (
+    <span className={`autocover${big ? ' autocover--big' : ''}`} aria-hidden="true">
+      <span className="autocover__grid" />
+      <span className="autocover__chip"><b>{mono}</b></span>
+      <span className="autocover__name">{project.name}</span>
+      <span className="autocover__meta">{project.verticalLabel}{project.tags.length ? ` · ${project.tags.slice(0, 3).join(' · ')}` : ''}</span>
+    </span>
+  );
+}
+
 export function ProjectCard({ project, index }) {
   const tilt = useTilt(5);
   // Every club project is live; the link only shows when there's a public URL.
@@ -24,7 +38,7 @@ export function ProjectCard({ project, index }) {
         {project.image ? (
           <img src={project.image} alt="" loading="lazy" />
         ) : (
-          <span className="pcard__placeholder">{project.name}<i>_</i></span>
+          <AutoCover project={project} />
         )}
         <span className="pcard__scan" aria-hidden="true" />
         <span className="pcard__ref">{partNo(index)}</span>
