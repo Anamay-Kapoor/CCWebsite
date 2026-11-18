@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import {
-  Environment, Lightformer, Grid, RoundedBox, Sparkles, PerformanceMonitor, AdaptiveDpr,
+  Environment, Lightformer, RoundedBox, Sparkles, PerformanceMonitor, AdaptiveDpr,
 } from '@react-three/drei';
 import { EffectComposer, Bloom, Vignette, ToneMapping } from '@react-three/postprocessing';
 import { ToneMappingMode } from 'postprocessing';
@@ -10,6 +10,7 @@ import { PLACES, BOARD } from './places';
 import { useBoardTexture } from './textures';
 import { Cpu, PARTS, SOFT, useMaterials } from './parts';
 import { Logo3D, Traces, Brackets, Packets, Bot } from './extras';
+import Ground from './ground';
 import { motion } from './motion';
 import { stats } from '../hud/stats';
 import { Projector } from './anchors';
@@ -279,19 +280,7 @@ export default function Board({
         <Lightformer form="rect" color="#ff3030" intensity={1.5} position={[0, -3, 0]} rotation-x={Math.PI / 2} scale={[20, 20, 1]} />
       </Environment>
 
-      <Grid
-        position={[0, -0.55, 0]}
-        args={[80, 80]}
-        cellSize={1}
-        cellThickness={0.5}
-        cellColor="#161616"
-        sectionSize={5}
-        sectionThickness={0.8}
-        sectionColor="#2a0808"
-        fadeDistance={55}
-        fadeStrength={1.4}
-        infiniteGrid
-      />
+      <Ground low={low} />
 
       <Pcb />
       <Traces active={active} hovered={hovered} />
