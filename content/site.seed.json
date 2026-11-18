@@ -142,5 +142,221 @@
       "link": "",
       "image": "/media/webdev-workshop.jpg"
     }
+  ],
+  "members": [
+    {
+      "id": "aditya",
+      "name": "Aditya",
+      "vertical": "webdev",
+      "batch": 2024,
+      "role": "Web Development Lead",
+      "lead": true,
+      "photo": "/team/webdev/aditya.jpg",
+      "focus": [
+        56,
+        32,
+        1.25
+      ]
+    },
+    {
+      "id": "nidesh",
+      "name": "Nidesh Ahilan",
+      "vertical": "webdev",
+      "batch": 2024,
+      "role": "Apogee Coordinator",
+      "lead": true,
+      "photo": "/team/webdev/nidesh.jpg",
+      "focus": [
+        50,
+        40,
+        1
+      ]
+    },
+    {
+      "id": "utkarsh",
+      "name": "Utkarsh Patil",
+      "vertical": "webdev",
+      "batch": 2024,
+      "role": "",
+      "lead": false,
+      "photo": "/team/webdev/utkarsh.jpg",
+      "focus": [
+        48,
+        35,
+        1
+      ]
+    },
+    {
+      "id": "darsh",
+      "name": "Darsh Patel",
+      "vertical": "webdev",
+      "batch": 2024,
+      "role": "",
+      "lead": false,
+      "photo": "/team/webdev/darsh.jpg",
+      "focus": [
+        50,
+        36,
+        1.55
+      ]
+    },
+    {
+      "id": "dhairya",
+      "name": "Dhairya Sharma",
+      "vertical": "webdev",
+      "batch": 2025,
+      "role": "",
+      "lead": false,
+      "photo": "/team/webdev/dhairya.jpg",
+      "focus": [
+        46,
+        20,
+        1.6
+      ]
+    },
+    {
+      "id": "tanish",
+      "name": "Tanish Soni",
+      "vertical": "webdev",
+      "batch": 2025,
+      "role": "",
+      "lead": false,
+      "photo": "/team/webdev/tanish.jpg",
+      "focus": [
+        51,
+        52,
+        2.5
+      ]
+    },
+    {
+      "id": "aditi",
+      "name": "Aditi Maheshwari",
+      "vertical": "webdev",
+      "batch": 2025,
+      "role": "",
+      "lead": false,
+      "photo": "/team/webdev/aditi.jpg",
+      "focus": [
+        50,
+        36,
+        1.15
+      ]
+    },
+    {
+      "id": "shreya",
+      "name": "Shreya Gupta",
+      "vertical": "webdev",
+      "batch": 2025,
+      "role": "",
+      "lead": false,
+      "photo": "/team/webdev/shreya.jpg",
+      "focus": [
+        50,
+        40,
+        1.1
+      ]
+    },
+    {
+      "id": "aanya",
+      "name": "Aanya Gupta",
+      "vertical": "webdev",
+      "batch": 2025,
+      "role": "",
+      "lead": false,
+      "photo": "/team/webdev/aanya.jpg",
+      "focus": [
+        50,
+        32,
+        1.05
+      ]
+    },
+    {
+      "id": "armaan",
+      "name": "Armaan Nanavaty",
+      "vertical": "webdev",
+      "batch": 2025,
+      "role": "",
+      "lead": false,
+      "photo": "/team/webdev/armaan.jpg",
+      "focus": [
+        44,
+        48,
+        1.9
+      ]
+    },
+    {
+      "id": "prem",
+      "name": "Prem Kumar",
+      "vertical": "webdev",
+      "batch": 2025,
+      "role": "",
+      "lead": false,
+      "photo": "/team/webdev/prem.jpg",
+      "focus": [
+        50,
+        56,
+        1.35
+      ]
+    },
+    {
+      "id": "nikunj",
+      "name": "Nikunj Rathi",
+      "vertical": "webdev",
+      "batch": 2025,
+      "role": "",
+      "lead": false,
+      "photo": "/team/webdev/nikunj.jpg",
+      "focus": [
+        50,
+        40,
+        1
+      ]
+    },
+    {
+      "id": "jayneel",
+      "name": "Jayneel Yadav",
+      "vertical": "webdev",
+      "batch": 2025,
+      "role": "",
+      "lead": false,
+      "photo": "/team/webdev/jayneel.jpg",
+      "focus": [
+        52,
+        34,
+        1.45
+      ]
+    },
+    {
+      "id": "shreyash",
+      "name": "Shreyash Satpathy",
+      "vertical": "webdev",
+      "batch": 2025,
+      "role": "",
+      "lead": false,
+      "photo": "/team/webdev/shreyash.jpg",
+      "focus": [
+        42,
+        36,
+        1.6
+      ]
+    },
+    {
+      "id": "anamay",
+      "name": "Anamay Kapoor",
+      "vertical": "webdev",
+      "batch": 2026,
+      "role": "",
+      "lead": false,
+      "photo": ""
+    },
+    {
+      "id": "atharv",
+      "name": "Atharv",
+      "vertical": "webdev",
+      "batch": 2026,
+      "role": "",
+      "lead": false,
+      "photo": ""
+    }
   ]
 }

@@ -1,4 +1,45 @@
 import { Buffer } from 'node:buffer';
+import { createHash } from 'node:crypto';
+import { mkdir, readFile as fsRead, writeFile as fsWrite } from 'node:fs/promises';
+import { dirname, join, resolve } from 'node:path';
+
+/*
+ * Local mode: on your own computer with no GitHub token set (e.g. `npm start`),
+ * content and uploads are read from / written to files in this project instead.
+ * Never used on Vercel.
+ */
+const LOCAL = !process.env.VERCEL && !process.env.GH_TOKEN;
+const ROOT = resolve(process.cwd());
+const localPath = (path) => {
+  const full = resolve(ROOT, path);
+  if (!full.startsWith(ROOT + '/')) throw Object.assign(new Error('Invalid path.'), { status: 400 });
+  return full;
+};
+const hash = (bytes) => createHash('sha1').update(bytes).digest('hex');
+
+async function localRead(path) {
+  try {
+    const bytes = await fsRead(localPath(path));
+    return { sha: hash(bytes), bytes };
+  } catch (error) {
+    if (error.code === 'ENOENT') throw Object.assign(new Error('File not found.'), { status: 404 });
+    throw error;
+  }
+}
+
+async function localWrite(path, bytes, sha) {
+  const full = localPath(path);
+  if (sha) {
+    const current = await localRead(path).catch(() => null);
+    if (!current || current.sha !== sha) {
+      throw Object.assign(new Error('Content changed. Reload the admin page and retry.'), { status: 409 });
+    }
+  }
+  await mkdir(dirname(full), { recursive: true });
+  const data = Buffer.from(bytes);
+  await fsWrite(full, data);
+  return hash(data);
+}
 
 const base = 'https://api.github.com';
 
@@ -42,6 +83,7 @@ function contentPath(path) {
 }
 
 export async function readFile(path) {
+  if (LOCAL) return localRead(path);
   const { branch } = settings();
   const file = await github('GET', `contents/${contentPath(path)}?ref=${encodeURIComponent(branch)}`);
   if (!file.sha || file.type !== 'file') {
@@ -59,6 +101,7 @@ export async function readFile(path) {
 }
 
 export async function writeFile(path, bytes, message, sha) {
+  if (LOCAL) return localWrite(path, bytes, sha);
   const { branch } = settings();
   const payload = {
     message,
@@ -71,7 +114,14 @@ export async function writeFile(path, bytes, message, sha) {
 }
 
 export async function readContent() {
-  const file = await readFile('content/site.json');
+  let file;
+  try {
+    file = await readFile('content/site.json');
+  } catch (error) {
+    // No content file yet: the first save from the admin creates it.
+    if (error.status === 404) return { data: { projects: [], bulletins: [], events: [] }, sha: null, missing: true };
+    throw error;
+  }
   let data;
   try {
     data = JSON.parse(file.bytes.toString('utf8'));

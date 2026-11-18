@@ -5,7 +5,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { BrowserRouter, Routes, Route, Link, Navigate, useLocation } from 'react-router-dom';
 import BackgroundText from './randombgtext';
 import Projects from './Projects.jsx';
-import Admin from './Admin.jsx';
+import Admin from './admin/Admin.jsx';
 import ProjectDetail from './ProjectDetail.jsx';
 import Join from './pages/Join.jsx';
 import Vertical from './pages/Vertical.jsx';
@@ -242,9 +242,9 @@ function Shell() {
     <>
       <a href="#main" className="skip-link">Skip to content</a>
       <ScrollManager />
-      <RouteWipe />
+      {!admin && <RouteWipe />}
       <Background />
-      <Crosshair />
+      {!admin && <Crosshair />}
       {!admin && <HudTop />}
       <div id="main">
         <Routes>

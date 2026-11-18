@@ -75,6 +75,26 @@ function event(p) {
   };
 }
 
+function member(p) {
+  if (!p || typeof p !== 'object' || Array.isArray(p)) issue('Invalid team member.');
+  if (!kinds.includes(p.vertical)) issue('Invalid team member vertical.');
+  const batch = Number(p.batch);
+  if (!Number.isInteger(batch) || batch < 2000 || batch > 2100) issue('Invalid batch year.');
+  if (p.lead !== undefined && typeof p.lead !== 'boolean') issue('Invalid lead flag.');
+  const clean = {
+    id: id(p.id), name: string(p.name, 'member name', 80, true), vertical: p.vertical, batch,
+    role: string(p.role ?? '', 'role', 80), lead: p.lead === true, photo: image(p.photo ?? ''),
+  };
+  // Optional photo framing: [x %, y %, zoom].
+  if (p.focus !== undefined && p.focus !== null) {
+    const f = p.focus;
+    if (!Array.isArray(f) || f.length !== 3 || !f.every((n) => typeof n === 'number' && Number.isFinite(n)) ||
+      f[0] < 0 || f[0] > 100 || f[1] < 0 || f[1] > 100 || f[2] < 0.5 || f[2] > 4) issue('Invalid photo framing.');
+    clean.focus = f;
+  }
+  return clean;
+}
+
 function checkUnique(arr, field) {
   if (new Set(arr.map((p) => p[field])).size !== arr.length) issue(`Duplicate ${field}.`);
 }
@@ -82,16 +102,38 @@ function checkUnique(arr, field) {
 export function validateContent(data) {
   if (!data || typeof data !== 'object' || Array.isArray(data)) issue('Invalid JSON data.');
   if (Buffer.byteLength(JSON.stringify(data)) > MAX_SIZE) issue('Website data exceeds 180 KB.');
+  const members = data.members ?? [];
   if (!Array.isArray(data.projects) || data.projects.length > 250 ||
     !Array.isArray(data.bulletins) || data.bulletins.length > 200 ||
-    !Array.isArray(data.events) || data.events.length > 200) issue('Invalid content collections.');
+    !Array.isArray(data.events) || data.events.length > 200 ||
+    !Array.isArray(members) || members.length > 500) issue('Invalid content collections.');
 
   const clean = {
     projects: data.projects.map(project),
     bulletins: data.bulletins.map(bulletin),
     events: data.events.map(event),
+    members: members.map(member),
   };
   for (const arr of Object.values(clean)) checkUnique(arr, 'id');
   checkUnique(clean.projects, 'slug');
   return clean;
+}
+
+/*
+ * Lenient version for reads: one bad entry (e.g. edited by hand on GitHub)
+ * is dropped instead of taking the whole website down.
+ */
+export function normalizeContent(raw) {
+  const data = raw && typeof raw === 'object' && !Array.isArray(raw) ? raw : {};
+  const keep = (list, fn) => (Array.isArray(list) ? list : []).flatMap((item) => {
+    try { return [fn(item)]; } catch (error) { console.warn('Skipping invalid entry:', error.message); return []; }
+  });
+  const out = {
+    projects: keep(data.projects, project),
+    bulletins: keep(data.bulletins, bulletin),
+    events: keep(data.events, event),
+  };
+  // Older content files have no team yet; leave it out so the site can use its bundled roster.
+  if (Array.isArray(data.members)) out.members = keep(data.members, member);
+  return out;
 }

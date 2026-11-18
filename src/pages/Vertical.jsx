@@ -78,7 +78,7 @@ export default function Vertical() {
   if (!v) return <Navigate to="/" replace />;
 
   const vi = VERTICALS.indexOf(v);
-  const members = membersOf(v.id);
+  const members = membersOf(content.members, v.id);
   const batches = byBatch(members);
   const projects = content.projects
     .map((p, i) => ({ p, i }))

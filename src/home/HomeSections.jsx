@@ -158,14 +158,14 @@ function EventsBlock({ upcoming, running, past }) {
 }
 
 /* ---------------- 04 Verticals ---------------- */
-function VerticalsBlock({ projects }) {
+function VerticalsBlock({ projects, members }) {
   return (
     <div className="verts">
       <Viewport kind="caps" refdes="C1–C6 · CAPACITOR BANK" caption="3D model of the capacitor bank" />
       <ol className="verts__list">
         {VERTICALS.map((v, i) => {
           const n = projects.filter((p) => p.vertical === v.id).length;
-          const m = membersOf(v.id).length;
+          const m = membersOf(members, v.id).length;
           return (
             <li key={v.id} className="reveal">
               <Link to={`/verticals/${v.id}`} className="vert">
@@ -216,7 +216,7 @@ export default function HomeSections({ content, loading, error, upcoming, runnin
       </HomeSection>
 
       <HomeSection id="verticals" index="04" place="stack" title="Verticals" lede="Where the energy is stored. Pick your voltage.">
-        <VerticalsBlock projects={projects} />
+        <VerticalsBlock projects={projects} members={content.members} />
       </HomeSection>
 
       <HomeSection id="join" index="05" place="join" title="Join the Club" lede={`Recruitment ${CLUB.session} is open. ${TEAM_COUNT} teams, zero experience required.`}>
