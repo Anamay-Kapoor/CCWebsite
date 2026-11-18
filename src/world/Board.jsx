@@ -30,7 +30,7 @@ function Rig({ active, started, mobile }) {
   }, [camera, mobile]);
 
   useFrame((state, dt) => {
-    const t = state.clock.elapsedTime;
+    const t = motion.on ? state.clock.elapsedTime : 0; // no idle sway when motion is off
     const place = PLACES.find((p) => p.id === active);
 
     if (!started) {
@@ -61,12 +61,13 @@ function Rig({ active, started, mobile }) {
       pos.set(-7.6 + Math.sin(t * 0.07) * 1.2, 23, 19.8);
     }
 
-    if (!mobile) {
+    if (!mobile && motion.on) {
       pos.x += state.pointer.x * (place ? 0.35 : 1);
       pos.y += state.pointer.y * (place ? 0.2 : 0.6);
     }
 
-    const k = damp(dt, started ? 2.2 : 8);
+    // Reduced motion: cut straight to the new view instead of flying there.
+    const k = motion.on ? damp(dt, started ? 2.2 : 8) : 1;
     camera.position.lerp(pos, k);
     look.current.lerp(lk, k);
     camera.lookAt(look.current);
@@ -185,7 +186,7 @@ function Stats({ onReady }) {
 
 /* ---------------- Scene ---------------- */
 export default function Board({
-  active, hovered, onSelect, onHover, onHome, started, mobile, running, onReady, onPoke, motionOn, labels,
+  active, hovered, onSelect, onHover, onHome, started, mobile, running, onReady, onPoke, motionOn, labels, onContextLost,
 }) {
   const [low, setLow] = useState(mobile);
   const shadows = !low;
@@ -200,6 +201,10 @@ export default function Board({
       camera={{ position: mobile ? [9, 3.5, 6] : [-9, 3.2, 9], fov: mobile ? 50 : 38, near: 0.1, far: 140 }}
       gl={{ antialias: false, powerPreference: 'high-performance', stencil: false }}
       onPointerMissed={() => onHover(null)}
+      onCreated={({ gl }) => {
+        // Windows GPUs sometimes reset; show the 2D board instead of a black canvas.
+        gl.domElement.addEventListener('webglcontextlost', (e) => { e.preventDefault(); onContextLost?.(); }, { once: true });
+      }}
     >
       <PerformanceMonitor onDecline={() => setLow(true)} flipflops={2} />
       <AdaptiveDpr pixelated={false} />

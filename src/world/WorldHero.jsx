@@ -159,10 +159,13 @@ export default function WorldHero({ booted, onReady, renderPanel, counts, latest
   const [hovered, setHovered] = useState(null);
   const [inView, setInView] = useState(true);
   const [botLine, setBotLine] = useState('');
-  const [use3D, setUse3D] = useState(() => hasWebGL());
+  // Why the 3D board isn't showing, if it isn't: 'nogl' (WebGL off, e.g. hardware
+  // acceleration disabled) or 'lost' (the graphics driver reset). Reduced motion keeps
+  // the 3D board and just stops it moving.
+  const [noGlReason, setNoGlReason] = useState(() => (hasWebGL() ? '' : 'nogl'));
+  const use3D = !noGlReason;
   const mobile = useMedia('(max-width: 760px)');
-  const reducedOS = useMedia('(prefers-reduced-motion: reduce)');
-  const flat = !use3D || (reducedOS && !motionOn);
+  const flat = !use3D;
   const activeRef = useRef(null);
   const hoveredRef = useRef(null);
   const botTimer = useRef(null);
@@ -311,7 +314,7 @@ export default function WorldHero({ booted, onReady, renderPanel, counts, latest
         {flat ? (
           <Schematic active={active} onSelect={open} />
         ) : (
-          <BoardBoundary fallback={<Schematic active={active} onSelect={open} />} onFail={() => { setUse3D(false); onReady?.(); }}>
+          <BoardBoundary fallback={<Schematic active={active} onSelect={open} />} onFail={() => { setNoGlReason('nogl'); onReady?.(); }}>
             <Suspense fallback={null}>
               <Board
                 active={active}
@@ -326,9 +329,17 @@ export default function WorldHero({ booted, onReady, renderPanel, counts, latest
                 onPoke={(line) => say(line, 4500)}
                 motionOn={motionOn}
                 labels={labelsRef}
+                onContextLost={() => setNoGlReason('lost')}
               />
             </Suspense>
           </BoardBoundary>
+        )}
+        {flat && (
+          <p className="world-nogl" role="note">
+            {noGlReason === 'lost'
+              ? 'Your graphics driver reset, so the 3D board was switched off. Reload the page to bring it back.'
+              : <>The 3D board needs graphics acceleration. In Chrome: <b>Settings → System → Use graphics acceleration when available</b>, then relaunch.</>}
+          </p>
         )}
         {!flat && (
           <div className="world-labels" ref={labelsRef} aria-hidden="true">
