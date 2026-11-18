@@ -425,8 +425,9 @@
   .world-lede { max-width: 40ch; }
 }
 
-/* Short screens: Places collapses to its header and opens on hover/focus. */
-@media (max-height: 820px) and (min-width: 761px) {
+/* Mouse screens: Places stays a slim bar (so it never covers the board) and opens on hover/focus.
+   Touch screens can't hover, so they keep the list open. */
+@media (min-width: 761px) and (hover: hover) and (pointer: fine) {
   .world-places ol, .world-places__keys {
     max-height: 0; overflow: hidden; opacity: 0;
     transition: max-height 0.45s var(--ease-out), opacity 0.3s, margin 0.3s;
@@ -438,7 +439,9 @@
   .world-places:hover .world-progress-bar, .world-places:focus-within .world-progress-bar { margin-bottom: 10px; }
   .world-places__head::after { content: "hover to open"; color: var(--dim); }
   .world-places:hover .world-places__head::after, .world-places:focus-within .world-places__head::after { content: ""; }
+}
 
+@media (max-height: 820px) and (min-width: 761px) {
   .world-title { font-size: clamp(2.6rem, 5.6vw, 4.8rem); }
   .world-lede { margin-bottom: 14px; font-size: 0.92rem; }
   .highlights { margin-bottom: 14px; }
@@ -552,3 +555,30 @@ html[data-motion="off"] .world-start__new, html[data-motion="off"] .world-scroll
 .world-nogl b { color: var(--text); font-weight: 600; }
 @media (max-width: 760px) { .world-nogl { bottom: auto; top: calc(var(--hud-h) + 120px); } }
 .world.is-open .world-nogl { display: none; }
+
+/* ---------- short landscape screens (phones on their side) ---------- */
+@media (max-height: 520px) and (min-width: 561px) {
+  .world { min-height: 0; }
+  .rulers, .world-sheet, .world-scroll, .world-start, .world-lede,
+  .world-intro .highlights, .world-intro .contact-block, .world-places__keys { display: none; }
+  .world-ui {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas: "intro ." ". ." "places places";
+    padding: calc(var(--hud-h) + 6px) max(16px, var(--safe-r)) 12px max(16px, var(--safe-l));
+    gap: 8px;
+  }
+  .world-intro { align-self: start; max-width: 46vw; }
+  .world-kicker { font-size: 10px; margin-bottom: 4px; }
+  .world-title { font-size: clamp(2rem, 7vh, 2.8rem); margin: 0; }
+  .world-places { width: 100%; padding: 8px 10px; }
+  .world-places__head, .world-progress-bar { display: none; }
+  .world-places ol { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; max-height: none; opacity: 1; overflow: visible; }
+  .world-place { grid-template-columns: minmax(0, 1fr); padding: 8px 6px; border: 1px solid var(--border-strong); border-radius: 10px; text-align: center; }
+  .world-place__idx, .world-place__label { display: none; }
+  .world-place__tag { display: block; color: inherit; font: 500 0.82rem/1 var(--sans); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .world-panel { top: calc(var(--hud-h) + 4px); bottom: 8px; }
+  .world-panel-head { padding: 12px 16px 10px; }
+  .world-panel-head h2 { font-size: 1.3rem; }
+  .world-panel-blurb { display: none; }
+}

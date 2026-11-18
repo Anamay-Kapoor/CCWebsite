@@ -19,15 +19,36 @@ const damp = (dt, speed) => 1 - Math.exp(-dt * speed);
 
 /* ---------------- Camera ---------------- */
 function Rig({ active, started, mobile }) {
-  const { camera } = useThree();
+  const { camera, scene } = useThree();
   const look = useRef(new THREE.Vector3(0, 0, 0));
   const pos = useMemo(() => new THREE.Vector3(), []);
   const lk = useMemo(() => new THREE.Vector3(), []);
+  // Desktop framing: the hero text covers the left of the screen, so the board is drawn
+  // centred in the free area to its right (shift, px) and pulled back to fit (zoom).
+  const frame = useRef({ shift: 0, zoom: 1 });
+  const freeLeft = useRef(0);
 
   useEffect(() => {
     camera.fov = mobile ? 50 : 38;
     camera.updateProjectionMatrix();
   }, [camera, mobile]);
+
+  useEffect(() => {
+    const el = document.querySelector('.world-intro');
+    const measure = () => {
+      const r = el?.getBoundingClientRect();
+      freeLeft.current = r && r.width && getComputedStyle(el).display !== 'none' ? r.right + 12 : 0;
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    if (el) ro.observe(el);
+    window.addEventListener('resize', measure);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('resize', measure);
+      camera.clearViewOffset();
+    };
+  }, [camera]);
 
   useFrame((state, dt) => {
     const t = motion.on ? state.clock.elapsedTime : 0; // no idle sway when motion is off
@@ -61,16 +82,40 @@ function Rig({ active, started, mobile }) {
       pos.set(-7.6 + Math.sin(t * 0.07) * 1.2, 23, 19.8);
     }
 
+    // Fit the overview into the area right of the hero text.
+    const W = state.size.width;
+    const H = state.size.height;
+    let shiftTarget = 0;
+    let zoomTarget = 1;
+    if (!mobile && started && !place && freeLeft.current > 0) {
+      const free = Math.max(W - freeLeft.current, W * 0.45);
+      shiftTarget = Math.min((W - free) / 2, W * 0.24);
+      zoomTarget = THREE.MathUtils.clamp((0.74 * W) / (0.97 * free), 1, 1.42);
+    }
+
+    // Reduced motion: cut straight to the new view instead of flying there.
+    const k = motion.on ? damp(dt, started ? 2.2 : 8) : 1;
+    const f = frame.current;
+    f.shift += (shiftTarget - f.shift) * k;
+    f.zoom += (zoomTarget - f.zoom) * k;
+    pos.sub(lk).multiplyScalar(f.zoom).add(lk);
+
     if (!mobile && motion.on) {
       pos.x += state.pointer.x * (place ? 0.35 : 1);
       pos.y += state.pointer.y * (place ? 0.2 : 0.6);
     }
 
-    // Reduced motion: cut straight to the new view instead of flying there.
-    const k = motion.on ? damp(dt, started ? 2.2 : 8) : 1;
     camera.position.lerp(pos, k);
     look.current.lerp(lk, k);
     camera.lookAt(look.current);
+    // Fog follows the camera distance, so pulling back never darkens the board.
+    if (scene.fog) {
+      const d = camera.position.distanceTo(look.current);
+      scene.fog.near = d * 0.75;
+      scene.fog.far = d * 1.8;
+    }
+    if (f.shift > 0.5) camera.setViewOffset(W, H, -f.shift, 0, W, H);
+    else if (camera.view?.enabled) camera.clearViewOffset();
   });
 
   return null;
