@@ -1,0 +1,362 @@
+{
+  "projects": [
+    {
+      "id": "timetable-generator",
+      "slug": "timetable-generator",
+      "name": "TimeTable Generator",
+      "vertical": "webdev",
+      "verticalLabel": "WebDev Vertical",
+      "tags": [
+        "Golang",
+        "React"
+      ],
+      "description": "Coding Club's Timetable Generator. Enter your BITS ID and build your perfect semester schedule; first-years can use it without an ID.",
+      "image": "/media/timetable-generator.png",
+      "liveUrl": "",
+      "sourceUrl": ""
+    },
+    {
+      "id": "code-duel",
+      "slug": "code-duel",
+      "name": "Code Duel",
+      "vertical": "webdev",
+      "verticalLabel": "WebDev Vertical",
+      "tags": [
+        "Next.js",
+        "Socket.IO",
+        "TypeScript",
+        "Go",
+        "Redis",
+        "Docker"
+      ],
+      "description": "Real-time 1v1 competitive programming. Sign in with Google, get matched with an opponent, and race to solve the same problem in the duel arena. Submissions run in a sandboxed Go execution engine with Docker runners for C, C++, Java and Python; matchmaking runs on Redis and the arena updates live over Socket.IO.",
+      "image": "/media/code-duel.jpg",
+      "liveUrl": "",
+      "sourceUrl": ""
+    },
+    {
+      "id": "cc-arcade",
+      "slug": "cc-arcade",
+      "name": "CC Arcade",
+      "vertical": "webdev",
+      "verticalLabel": "WebDev Vertical",
+      "tags": [
+        "React",
+        "Django",
+        "Celery",
+        "PostgreSQL",
+        "RabbitMQ"
+      ],
+      "description": "The club arcade for OASIS 2026: Minesweeper, Snake, Tetris, Wordle, Pac-Man and Flappy Bird in the browser, with tracked game sessions and live leaderboards. A React frontend over a Django backend, with a dedicated Celery queue per game, PostgreSQL and RabbitMQ.",
+      "image": "/media/cc-arcade.jpg",
+      "liveUrl": "",
+      "sourceUrl": "https://github.com/CodingClubOasisProject2026/coding-club-arcade"
+    },
+    {
+      "id": "inter-bhawan-cc",
+      "slug": "inter-bhawan-cc",
+      "name": "Inter-Bhawan CC",
+      "vertical": "webdev",
+      "verticalLabel": "WebDev Vertical",
+      "tags": [
+        "Next.js",
+        "Monaco",
+        "Socket.IO",
+        "Go",
+        "Django",
+        "Docker"
+      ],
+      "description": "The platform behind the Inter-Bhawan coding contest: eight problems, ICPC-style scoring (problems solved, then penalty time) and a leaderboard that updates live. Contestants sign in with Google and code in a Monaco editor with sample runs, custom input and snippets; every submission is judged by a sandboxed Go execution engine, and organisers export results from a Django admin portal.",
+      "image": "/media/inter-bhawan.jpg",
+      "liveUrl": "",
+      "sourceUrl": ""
+    },
+    {
+      "id": "swd-portal",
+      "slug": "swd-portal",
+      "name": "SWD Portal",
+      "vertical": "webdev",
+      "verticalLabel": "WebDev Vertical",
+      "tags": [
+        "React",
+        "Vite",
+        "JavaScript",
+        "CSS"
+      ],
+      "description": "A redesigned Student Welfare Division portal for BITS Pilani: a login with BITS ID and CAPTCHA, and a dashboard that brings the profile, dues, certificates, scholarships, travel concession, clubs, ID card and MCN / SAF forms into one place.",
+      "image": "/media/swd-portal.jpg",
+      "liveUrl": "",
+      "sourceUrl": "https://github.com/devillish404/swd"
+    },
+    {
+      "id": "railway-to-rome",
+      "slug": "railway-to-rome",
+      "name": "Railway To Rome",
+      "vertical": "gamedev",
+      "verticalLabel": "GameDev Vertical",
+      "tags": [
+        "Tower Defense",
+        "FPS Combat",
+        "Auto/Manual",
+        "Low Poly World"
+      ],
+      "description": "A low-poly tower defense and FPS hybrid.",
+      "image": "/railway_rome.png",
+      "liveUrl": "",
+      "sourceUrl": ""
+    }
+  ],
+  "bulletins": [
+    {
+      "id": "recruitment-2026-27",
+      "title": "Recruitment Drive Open",
+      "description": "Applications are now open for new members for 2026–27. Submit your details through the recruitment form and watch this space for updates.",
+      "image": "",
+      "links": [
+        {
+          "label": "How to join →",
+          "url": "/join"
+        }
+      ]
+    },
+    {
+      "id": "timetable-generator-live",
+      "title": "New Project: TimeTable Generator",
+      "description": "Our Timetable Generator is live. Build your semester schedule in a few clicks.",
+      "image": "",
+      "links": [
+        {
+          "label": "Project page →",
+          "url": "/projects/timetable-generator"
+        }
+      ]
+    }
+  ],
+  "events": [
+    {
+      "id": "webdev-workshop-2026",
+      "name": "WebDev Workshop",
+      "description": "A hands-on intro to web development by the WebDev vertical. Frontend first (HTML, CSS and Flexbox, with a Flexbox Monkey game to practise layouts), then backend: building a Django music app end to end.",
+      "startDate": "2026-08-18",
+      "endDate": "2026-08-18",
+      "link": "",
+      "image": "/media/webdev-workshop.jpg"
+    }
+  ],
+  "members": [
+    {
+      "id": "aditya",
+      "name": "Aditya",
+      "vertical": "webdev",
+      "batch": 2024,
+      "role": "Web Development Lead",
+      "lead": true,
+      "photo": "/team/webdev/aditya.jpg",
+      "focus": [
+        56,
+        32,
+        1.25
+      ]
+    },
+    {
+      "id": "nidesh",
+      "name": "Nidesh Ahilan",
+      "vertical": "webdev",
+      "batch": 2024,
+      "role": "Apogee Coordinator",
+      "lead": true,
+      "photo": "/team/webdev/nidesh.jpg",
+      "focus": [
+        50,
+        40,
+        1
+      ]
+    },
+    {
+      "id": "utkarsh",
+      "name": "Utkarsh Patil",
+      "vertical": "webdev",
+      "batch": 2024,
+      "role": "",
+      "lead": false,
+      "photo": "/team/webdev/utkarsh.jpg",
+      "focus": [
+        48,
+        35,
+        1
+      ]
+    },
+    {
+      "id": "darsh",
+      "name": "Darsh Patel",
+      "vertical": "webdev",
+      "batch": 2024,
+      "role": "",
+      "lead": false,
+      "photo": "/team/webdev/darsh.jpg",
+      "focus": [
+        50,
+        36,
+        1.55
+      ]
+    },
+    {
+      "id": "dhairya",
+      "name": "Dhairya Sharma",
+      "vertical": "webdev",
+      "batch": 2025,
+      "role": "",
+      "lead": false,
+      "photo": "/team/webdev/dhairya.jpg",
+      "focus": [
+        46,
+        20,
+        1.6
+      ]
+    },
+    {
+      "id": "tanish",
+      "name": "Tanish Soni",
+      "vertical": "webdev",
+      "batch": 2025,
+      "role": "",
+      "lead": false,
+      "photo": "/team/webdev/tanish.jpg",
+      "focus": [
+        51,
+        52,
+        2.5
+      ]
+    },
+    {
+      "id": "aditi",
+      "name": "Aditi Maheshwari",
+      "vertical": "webdev",
+      "batch": 2025,
+      "role": "",
+      "lead": false,
+      "photo": "/team/webdev/aditi.jpg",
+      "focus": [
+        50,
+        36,
+        1.15
+      ]
+    },
+    {
+      "id": "shreya",
+      "name": "Shreya Gupta",
+      "vertical": "webdev",
+      "batch": 2025,
+      "role": "",
+      "lead": false,
+      "photo": "/team/webdev/shreya.jpg",
+      "focus": [
+        50,
+        40,
+        1.1
+      ]
+    },
+    {
+      "id": "aanya",
+      "name": "Aanya Gupta",
+      "vertical": "webdev",
+      "batch": 2025,
+      "role": "",
+      "lead": false,
+      "photo": "/team/webdev/aanya.jpg",
+      "focus": [
+        50,
+        32,
+        1.05
+      ]
+    },
+    {
+      "id": "armaan",
+      "name": "Armaan Nanavaty",
+      "vertical": "webdev",
+      "batch": 2025,
+      "role": "",
+      "lead": false,
+      "photo": "/team/webdev/armaan.jpg",
+      "focus": [
+        44,
+        48,
+        1.9
+      ]
+    },
+    {
+      "id": "prem",
+      "name": "Prem Kumar",
+      "vertical": "webdev",
+      "batch": 2025,
+      "role": "",
+      "lead": false,
+      "photo": "/team/webdev/prem.jpg",
+      "focus": [
+        50,
+        56,
+        1.35
+      ]
+    },
+    {
+      "id": "nikunj",
+      "name": "Nikunj Rathi",
+      "vertical": "webdev",
+      "batch": 2025,
+      "role": "",
+      "lead": false,
+      "photo": "/team/webdev/nikunj.jpg",
+      "focus": [
+        50,
+        40,
+        1
+      ]
+    },
+    {
+      "id": "jayneel",
+      "name": "Jayneel Yadav",
+      "vertical": "webdev",
+      "batch": 2025,
+      "role": "",
+      "lead": false,
+      "photo": "/team/webdev/jayneel.jpg",
+      "focus": [
+        52,
+        34,
+        1.45
+      ]
+    },
+    {
+      "id": "shreyash",
+      "name": "Shreyash Satpathy",
+      "vertical": "webdev",
+      "batch": 2025,
+      "role": "",
+      "lead": false,
+      "photo": "/team/webdev/shreyash.jpg",
+      "focus": [
+        42,
+        36,
+        1.6
+      ]
+    },
+    {
+      "id": "anamay",
+      "name": "Anamay Kapoor",
+      "vertical": "webdev",
+      "batch": 2026,
+      "role": "",
+      "lead": false,
+      "photo": ""
+    },
+    {
+      "id": "atharv",
+      "name": "Atharv",
+      "vertical": "webdev",
+      "batch": 2026,
+      "role": "",
+      "lead": false,
+      "photo": ""
+    }
+  ]
+}
