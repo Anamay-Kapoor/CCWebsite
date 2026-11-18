@@ -71,7 +71,7 @@ Admin saves are commits. `vercel.json` skips rebuilding when a commit only touch
 - **Site headers** (`vercel.json`): strict Content-Security-Policy (no inline or third-party
   scripts), HSTS, clickjacking protection, `nosniff`, Referrer-Policy, Permissions-Policy.
   `/admin` and `/api` are `noindex`.
-- No source maps are published (`.env`).
+- No source maps are published, and the webpack runtime isn't inlined (both set in the `build` script).
 
 Rate limits are per serverless instance. For stronger protection, add a Vercel Firewall rule
 (Project → Firewall) limiting `POST /api/login`, e.g. 20 requests per 10 minutes per IP.
