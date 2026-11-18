@@ -703,7 +703,26 @@ html.has-crosshair input, html.has-crosshair textarea { cursor: text !important;
   .process li:not(:last-child)::before { left: 16px; top: 34px; }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .footer-motto__track { animation: none; }
-  .hud-sheet, .hud-sheet__link { transition: none; }
+/* Motion button off */
+html[data-motion="off"] .footer-motto__track { animation: none; }
+html[data-motion="off"] .hud-sheet, html[data-motion="off"] .hud-sheet__link { transition: none; }
+
+/* ============ CROSS-DEVICE CONSISTENCY ============ */
+:root {
+  --safe-l: env(safe-area-inset-left, 0px);
+  --safe-r: env(safe-area-inset-right, 0px);
+  --safe-t: env(safe-area-inset-top, 0px);
+}
+/* iOS: don't enlarge text when the phone rotates; no grey flash on tap. */
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+* { -webkit-tap-highlight-color: transparent; }
+/* iOS Safari zooms into any field under 16px when tapped. */
+@media (pointer: coarse), (max-width: 900px) {
+  input, textarea, select { font-size: 16px !important; }
+}
+/* Keep the fixed bars clear of notches and rounded corners in landscape. */
+.hud-top { padding-left: max(28px, calc(var(--safe-l) + 16px)); padding-right: max(20px, calc(var(--safe-r) + 12px)); padding-top: var(--safe-t); height: calc(var(--hud-h) + var(--safe-t)); }
+.statusbar { padding-left: max(14px, var(--safe-l)); padding-right: max(14px, var(--safe-r)); }
+@media (max-width: 860px) {
+  .hud-top { padding-left: max(16px, calc(var(--safe-l) + 10px)); padding-right: max(14px, calc(var(--safe-r) + 10px)); }
 }

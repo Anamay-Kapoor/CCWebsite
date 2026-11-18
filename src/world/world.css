@@ -530,10 +530,9 @@
   .world-lede { display: none; }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .world-panel, .world-ui, .world-intro, .world-places { transition: none; }
-  .world-start__new, .world-scroll i::after { animation: none; }
-}
+/* Motion button off */
+html[data-motion="off"] .world-panel, html[data-motion="off"] .world-ui, html[data-motion="off"] .world-intro, html[data-motion="off"] .world-places { transition: none; }
+html[data-motion="off"] .world-start__new, html[data-motion="off"] .world-scroll i::after { animation: none; }
 
 /* shown only when the 3D board can't run */
 .world-nogl {

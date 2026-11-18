@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { gsap, useGSAP, useMagnetic, useTilt, Scramble } from './ui';
+import { gsap, useGSAP, useMagnetic, useTilt, Scramble, motionQuery } from './ui';
 import { useContent, externalLink } from './content';
 import { partNo, AutoCover } from './Projects';
 
@@ -65,7 +65,7 @@ function ProjectDetail() {
 
   useGSAP(() => {
     if (!project) return;
-    gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', () => {
+    gsap.matchMedia().add(motionQuery(), () => {
       gsap.from('.ds-reveal', { y: 40, opacity: 0, stagger: 0.08, duration: 0.9, ease: 'power3.out' });
       gsap.from('.pinout__pin', { scaleX: 0, transformOrigin: 'center', stagger: 0.04, duration: 0.4, delay: 0.5 });
     });

@@ -7,17 +7,19 @@ const Hud = createContext(null);
 export const useHud = () => useContext(Hud);
 
 const VISITED_KEY = 'cc-visited';
-const MOTION_KEY = 'cc-motion';
+const MOTION_KEY = 'cc-motion-v2'; // v2: old key stored the OS default, not a choice
 
 const read = (fn, fallback) => { try { return fn(); } catch { return fallback; } };
 
 export function HudProvider({ children }) {
   const [soundOn, setSoundOn] = useState(false);
-  const [motionOn, setMotionOn] = useState(() => read(() => {
-    const saved = localStorage.getItem(MOTION_KEY);
-    if (saved) return saved === 'on';
-    return !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  }, true));
+  // Motion is on unless the visitor turned it off with the pause button. (Windows reports
+  // "reduce motion" whenever Animation effects is off, which left the whole site frozen.)
+  const [motionOn, setMotionOn] = useState(() => {
+    const on = read(() => localStorage.getItem(MOTION_KEY) !== 'off', true);
+    document.documentElement.dataset.motion = on ? 'on' : 'off'; // before any animation reads it
+    return on;
+  });
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [visited, setVisited] = useState(() => read(() => new Set(JSON.parse(sessionStorage.getItem(VISITED_KEY) || '[]')), new Set()));
   const [toast, setToast] = useState(null);
@@ -47,10 +49,12 @@ export function HudProvider({ children }) {
 
   useEffect(() => {
     document.documentElement.dataset.motion = motionOn ? 'on' : 'off';
-    read(() => localStorage.setItem(MOTION_KEY, motionOn ? 'on' : 'off'));
   }, [motionOn]);
 
-  const toggleMotion = useCallback(() => setMotionOn((m) => !m), []);
+  const toggleMotion = useCallback(() => setMotionOn((m) => {
+    read(() => localStorage.setItem(MOTION_KEY, m ? 'off' : 'on'));
+    return !m;
+  }), []);
 
   const markVisited = useCallback((id) => {
     const prev = visitedRef.current;

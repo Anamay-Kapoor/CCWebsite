@@ -143,11 +143,13 @@ const TextType = ({
   }, [onSentenceComplete]);
 
   useEffect(() => {
-    const query = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const update = () => setReduceMotion(query.matches);
+    // Follow the site's Motion button (html[data-motion]), not the OS setting.
+    const html = document.documentElement;
+    const update = () => setReduceMotion(html.dataset.motion === 'off');
     update();
-    query.addEventListener('change', update);
-    return () => query.removeEventListener('change', update);
+    const mo = new MutationObserver(update);
+    mo.observe(html, { attributes: true, attributeFilter: ['data-motion'] });
+    return () => mo.disconnect();
   }, []);
 
   useEffect(() => {

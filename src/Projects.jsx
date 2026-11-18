@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { gsap, useGSAP, useTilt } from './ui';
+import { gsap, useGSAP, useTilt, motionQuery } from './ui';
 import { useContent, externalLink } from './content';
 import PageHero from './pages/PageHero';
 import { VERTICALS } from './data/club';
@@ -119,7 +119,7 @@ function Projects() {
   const resultKey = filtered.map(({ p }) => p.id).join('|');
 
   useGSAP(() => {
-    gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', () => {
+    gsap.matchMedia().add(motionQuery(), () => {
       gsap.from('.pcard', { y: 40, opacity: 0, stagger: 0.07, duration: 0.8, ease: 'power3.out' });
     });
   }, { scope: root, dependencies: [resultKey] });

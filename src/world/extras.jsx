@@ -221,9 +221,9 @@ export function Bot({ active, onPoke }) {
     body.current.rotation.z = THREE.MathUtils.clamp(-vel.current.x * 0.12, -0.5, 0.5);
     body.current.rotation.x = THREE.MathUtils.clamp(vel.current.z * 0.12, -0.5, 0.5);
 
-    rotors.current.forEach((rt, i) => { if (rt) rt.rotation.y += dt * (28 + i); });
+    rotors.current.forEach((rt, i) => { if (rt) rt.rotation.y += d * (28 + i); });
 
-    blink.current -= dt;
+    blink.current -= d;
     if (blink.current < -3.2) blink.current = 0.14;
     eyes.current.scale.y = blink.current > 0 ? 0.15 : 1;
 

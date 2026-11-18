@@ -1,6 +1,6 @@
 import React, { Component, Suspense, lazy, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { gsap, useGSAP } from '../ui';
+import { gsap, useGSAP, motionQuery } from '../ui';
 import { useHud } from '../hud/HudContext';
 import { LogoMark } from '../hud/HudTop';
 
@@ -18,6 +18,7 @@ function hasWebGL() {
 class Boundary extends Component {
   state = { failed: false };
   static getDerivedStateFromError() { return { failed: true }; }
+  componentDidCatch() { this.props.onFail?.(); }
   render() { return this.state.failed ? this.props.fallback : this.props.children; }
 }
 
@@ -42,10 +43,10 @@ export function Viewport({ kind, refdes, caption }) {
   );
 
   return (
-    <figure className={`viewport${ready ? ' is-ready' : ''}`} ref={box}>
+    <figure className={`viewport${ready || !gl ? ' is-ready' : ''}`} ref={box}>
       <div className="viewport-stage">
         {gl ? (
-          <Boundary fallback={fallback}>
+          <Boundary fallback={fallback} onFail={() => setReady(true)}>
             <Suspense fallback={null}>
               {inView || ready ? (
                 <PartViewer kind={kind} running={inView} motionOn={motionOn} onReady={() => setReady(true)} />
@@ -78,7 +79,7 @@ export default function PageHero({ sheet, crumb, kicker, title, lede, stats = []
   const root = useRef(null);
 
   useGSAP(() => {
-    gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', () => {
+    gsap.matchMedia().add(motionQuery(), () => {
       gsap.timeline({ defaults: { ease: 'expo.out' } })
         .from('.page-hero__copy > *', { y: 36, opacity: 0, stagger: 0.07, duration: 1 }, 0.05)
         .from('.viewport', { opacity: 0, scale: 0.96, duration: 1.1 }, 0.15)

@@ -55,8 +55,7 @@ export default function Intro({ isReady, onDone }) {
   };
 
   useGSAP(() => {
-    const reduced = document.documentElement.dataset.motion === 'off'
-      || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const reduced = document.documentElement.dataset.motion === 'off';
     const q = gsap.utils.selector(root);
     const counter = { v: 0 };
     const lines = q('.intro-half--top .intro-log__line').length;

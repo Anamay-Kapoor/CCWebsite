@@ -476,11 +476,8 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .detail-page *,
-  .detail-page *::before,
-  .detail-page *::after {
+/* Motion button off */
+html[data-motion="off"] .detail-page *, html[data-motion="off"] .detail-page *::before, html[data-motion="off"] .detail-page *::after {
     animation: none !important;
     transition: none !important;
   }
-}

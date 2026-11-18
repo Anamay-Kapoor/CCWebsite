@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
-import { gsap, useGSAP, SectionHead } from '../ui';
+import { gsap, useGSAP, SectionHead, motionQuery } from '../ui';
 import { useContent } from '../content';
 import { VERTICALS, verticalById, CLUB } from '../data/club';
 import { membersOf, byBatch } from '../data/team';
@@ -62,7 +62,7 @@ export default function Vertical() {
   const { content, loading } = useContent();
 
   useGSAP(() => {
-    gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', () => {
+    gsap.matchMedia().add(motionQuery(), () => {
       gsap.utils.toArray('.vpage .reveal').forEach((el, i) => {
         gsap.from(el, {
           y: 40, opacity: 0, duration: 0.8, ease: 'power3.out', delay: (i % 4) * 0.06,

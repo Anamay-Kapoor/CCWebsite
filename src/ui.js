@@ -7,8 +7,10 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 export { gsap, ScrollTrigger, useGSAP };
 
-export const prefersReduced = () =>
-  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+/* Motion follows the site's own Motion button (html[data-motion]), not the OS setting. */
+export const prefersReduced = () => document.documentElement.dataset.motion === 'off';
+/* For gsap.matchMedia(): matches everything while motion is on, nothing when it's off. */
+export const motionQuery = () => (prefersReduced() ? 'not all' : 'all');
 
 export const canHover = () =>
   window.matchMedia('(hover: hover) and (pointer: fine)').matches;

@@ -1204,13 +1204,12 @@ main { width: 100%; }
   .btn { min-width: 0; }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  *, *::before, *::after {
+/* Motion button off */
+html[data-motion="off"] html { scroll-behavior: auto; }
+html[data-motion="off"] *, html[data-motion="off"] *::before, html[data-motion="off"] *::after {
     animation: none !important;
     transition: none !important;
-  }
-}/* ============ TYPOGRAPHY ============ */
+  }/* ============ TYPOGRAPHY ============ */
 .hero-title,
 .section-title,
 .projects-title,

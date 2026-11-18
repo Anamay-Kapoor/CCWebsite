@@ -22,7 +22,7 @@ import { CLUB, STACK } from './data/club';
 import {
   BulletinList, EventsBoard, EventKinds, ProjectList, StackList, JoinSummary, ContactBlock, ContactForm, PastEvents,
 } from './sections';
-import { gsap, ScrollTrigger, useGSAP, Background } from './ui';
+import { gsap, ScrollTrigger, useGSAP, Background, motionQuery } from './ui';
 
 let hasBooted = false;
 
@@ -131,7 +131,7 @@ function Home() {
   useGSAP(() => {
     if (!booted) return;
     const mm = gsap.matchMedia();
-    mm.add('(prefers-reduced-motion: no-preference)', () => {
+    mm.add(motionQuery(), () => {
       gsap.timeline({ defaults: { ease: 'expo.out' } })
         .from('.world-intro > *', { y: 40, opacity: 0, stagger: 0.08, duration: 1.1 }, 0.35)
         .from('.world-sheet, .world-places__head, .world-progress-bar, .world-places li, .world-places__keys, .world-scroll', {

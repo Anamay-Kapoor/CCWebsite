@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { gsap, useGSAP, SectionHead } from '../ui';
+import { gsap, useGSAP, SectionHead, motionQuery } from '../ui';
 import { CLUB, JOIN_PITCH, TEAM_COUNT, PROCESS } from '../data/club';
 import { RoleTabs, FaqList, ContactBlock, WhyJoin, ProcessTrace } from '../sections';
 import PageHero from './PageHero';
@@ -10,7 +10,7 @@ export default function Join() {
   const root = useRef(null);
 
   useGSAP(() => {
-    gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', () => {
+    gsap.matchMedia().add(motionQuery(), () => {
       gsap.utils.toArray('.join-page .reveal').forEach((el) => {
         gsap.from(el, { y: 50, opacity: 0, duration: 0.9, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 88%' } });
       });
