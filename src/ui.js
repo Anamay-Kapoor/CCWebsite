@@ -1,5 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
@@ -27,55 +26,6 @@ export function Background() {
       <div className="bg-vignette" />
     </div>
   );
-}
-
-/* ---------- Cursor ring + spotlight position ---------- */
-export function Cursor() {
-  const ring = useRef(null);
-
-  useGSAP(() => {
-    const docEl = document.documentElement;
-    const fine = canHover();
-    let xTo, yTo, shown = false;
-
-    if (fine) {
-      gsap.set(ring.current, { xPercent: -50, yPercent: -50 });
-      xTo = gsap.quickTo(ring.current, 'x', { duration: 0.35, ease: 'power3' });
-      yTo = gsap.quickTo(ring.current, 'y', { duration: 0.35, ease: 'power3' });
-    }
-
-    const move = (e) => {
-      docEl.style.setProperty('--cx', `${e.clientX}px`);
-      docEl.style.setProperty('--cy', `${e.clientY}px`);
-      if (!fine) return;
-      xTo(e.clientX);
-      yTo(e.clientY);
-      if (!shown) {
-        shown = true;
-        gsap.to(ring.current, { opacity: 1, duration: 0.3 });
-      }
-    };
-
-    const over = (e) => {
-      if (!fine) return;
-      const hot = e.target.closest?.('a, button, summary, input, textarea, select, .tilt');
-      gsap.to(ring.current, {
-        scale: hot ? 1.8 : 1,
-        borderColor: hot ? '#d4ff3a' : 'rgba(237, 237, 237, 0.6)',
-        duration: 0.3,
-        overwrite: 'auto',
-      });
-    };
-
-    window.addEventListener('pointermove', move);
-    window.addEventListener('pointerover', over);
-    return () => {
-      window.removeEventListener('pointermove', move);
-      window.removeEventListener('pointerover', over);
-    };
-  });
-
-  return <div ref={ring} className="cursor-ring" aria-hidden="true" />;
 }
 
 /* ---------- Magnetic pull on hover ---------- */
@@ -183,77 +133,6 @@ export function SectionHead({ index, title }) {
       <span className="section-index">{index} {'//'}</span>
       <Scramble text={title} className="section-title" />
       <span className="section-line" aria-hidden="true" />
-    </div>
-  );
-}
-
-/* ---------- Global menu (used on every page) ---------- */
-export function SiteMenu() {
-  const [open, setOpen] = useState(false);
-  const root = useRef(null);
-  const { pathname } = useLocation();
-
-  useEffect(() => { setOpen(false); }, [pathname]);
-
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e) => { if (e.key === 'Escape') setOpen(false); };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [open]);
-
-  useGSAP(() => {
-    if (!open || prefersReduced()) return;
-    gsap.fromTo(
-      '.sidebar-link',
-      { x: -40, opacity: 0 },
-      { x: 0, opacity: 1, stagger: 0.07, duration: 0.5, ease: 'power3.out', delay: 0.15 }
-    );
-  }, { scope: root, dependencies: [open] });
-
-  const tab = open ? 0 : -1;
-
-  // Same-page hash links don't trigger a route change, so scroll manually.
-  const go = (id) => () => {
-    setOpen(false);
-    if (pathname === '/' && id) {
-      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  };
-
-  return (
-    <div ref={root}>
-      <button
-        className="menu-toggle"
-        type="button"
-        aria-label={open ? 'Close menu' : 'Open menu'}
-        aria-expanded={open}
-        onClick={() => setOpen(!open)}
-      >
-        <span /><span /><span />
-      </button>
-
-      <button
-        className={`sidebar-backdrop ${open ? 'visible' : ''}`}
-        type="button"
-        aria-label="Close menu"
-        tabIndex={tab}
-        onClick={() => setOpen(false)}
-      />
-
-      <aside className={`sidebar ${open ? 'sidebar-open' : ''}`} aria-hidden={!open}>
-        <p className="sidebar-label">{'//'} navigate</p>
-        <Link className="sidebar-link" to="/#home" tabIndex={tab} onClick={go('home')}>
-          <span>01</span>Home
-        </Link>
-        <Link className="sidebar-link" to="/projects" tabIndex={tab} onClick={() => setOpen(false)}>
-          <span>02</span>Projects
-        </Link>
-        <Link className="sidebar-link" to="/#contact" tabIndex={tab} onClick={go('contact')}>
-          <span>03</span>Contact
-        </Link>
-        <p className="sidebar-foot">coding club · bits pilani</p>
-      </aside>
     </div>
   );
 }

@@ -29,7 +29,8 @@ function buildElements() {
     phrases: [...CODE_LINES].sort(() => Math.random() - 0.5),
     accent: i % 4 === 0,
     style: {
-      top: `${Math.floor(Math.random() * 80) + 10}%`,
+      // One horizontal band per snippet so two lines never land on top of each other.
+      top: `${(10 + ((i + 0.2 + Math.random() * 0.6) / count) * 82).toFixed(2)}%`,
       left: `${Math.floor(Math.random() * 60) + 3}%`,
       fontSize: `${Math.floor(Math.random() * 6) + 12}px`,
       opacity: Math.random() * 0.06 + 0.08,

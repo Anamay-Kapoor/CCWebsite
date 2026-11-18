@@ -1,37 +1,69 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import TextType from './TextType';
-import { gsap, useGSAP, useTilt, prefersReduced } from './ui';
-import { useContent } from './content';
+import { gsap, useGSAP, useTilt } from './ui';
+import { useContent, externalLink } from './content';
+import PageHero from './pages/PageHero';
+import { VERTICALS } from './data/club';
 
-const PROJECT_WORDS = ['AI/ML', 'WebDev', 'GameDev'];
+const ext = (url) => (externalLink(url) ? { target: '_blank', rel: 'noopener noreferrer' } : {});
+export const partNo = (i) => `CC-PRJ-${String(i + 1).padStart(3, '0')}`;
 
-function ProjectCard({ project, index }) {
-  const tilt = useTilt(6);
+const FILTERS = [{ id: 'all', name: 'All' }, ...VERTICALS.map((v) => ({ id: v.id, name: v.name }))];
 
+function host(url) {
+  try { return new URL(url).host; } catch { return ''; }
+}
+
+export function ProjectCard({ project, index }) {
+  const tilt = useTilt(5);
+  // Every club project is live; the link only shows when there's a public URL.
+  const live = !!project.liveUrl;
   return (
-    <article ref={tilt} className="listing-card tilt">
-      <div className="listing-image">
+    <article ref={tilt} className="pcard tilt">
+      <Link to={`/projects/${project.slug}`} className="pcard__media" aria-label={`${project.name} details`}>
         {project.image ? (
-          <img src={project.image} alt={`${project.name} preview`} loading="lazy" />
+          <img src={project.image} alt="" loading="lazy" />
         ) : (
-          <span className="listing-image-text">{project.name}</span>
+          <span className="pcard__placeholder">{project.name}<i>_</i></span>
         )}
-        <span className="listing-index">{String(index + 1).padStart(2, '0')}</span>
-      </div>
-
-      <div className="listing-content">
-        <p className="listing-vertical">{project.verticalLabel}</p>
-        <h2>{project.name}</h2>
-        <div className="language-container">
-          {project.tags.map((tag) => (
-            <span className="language-box" key={tag}>{tag}</span>
-          ))}
+        <span className="pcard__scan" aria-hidden="true" />
+        <span className="pcard__ref">{partNo(index)}</span>
+        <span className="pcard__status is-live"><i />Live</span>
+      </Link>
+      <div className="pcard__body">
+        <p className="pcard__vertical">{project.verticalLabel}</p>
+        <h2 className="pcard__title">
+          <Link to={`/projects/${project.slug}`}>{project.name}</Link>
+        </h2>
+        <p className="pcard__desc">{project.description}</p>
+        <ul className="pcard__tags" aria-label="Stack">
+          {project.tags.map((tag) => <li key={tag}>{tag}</li>)}
+        </ul>
+        <div className="pcard__foot">
+          <Link to={`/projects/${project.slug}`} className="pcard__link">Datasheet →</Link>
+          <span className="pcard__ext">
+            {live && <a href={project.liveUrl} {...ext(project.liveUrl)} title={host(project.liveUrl)}>Live ↗</a>}
+            {project.sourceUrl && <a href={project.sourceUrl} {...ext(project.sourceUrl)}>Source ↗</a>}
+          </span>
         </div>
-        <p className="listing-description">
-          {project.description}
-          <Link to={`/projects/${project.slug}`} className="listing-link">View Project →</Link>
-        </p>
+      </div>
+      <span className="pcard__trace" aria-hidden="true" />
+    </article>
+  );
+}
+
+export function PitchCard() {
+  return (
+    <article className="pcard pcard--pitch">
+      <div className="pcard__pitch">
+        <span className="pcard__ref">CC-PRJ-???</span>
+        <p className="pcard__vertical">Empty slot</p>
+        <h2 className="pcard__title">Your project here</h2>
+        <p className="pcard__desc">Got an idea for campus, a game, or a model? Pitch it and we’ll help you build it.</p>
+        <div className="pcard__pitch-actions">
+          <Link to="/?place=contact" className="pcard__link">Pitch it →</Link>
+          <Link to="/join" className="pcard__link">Join a team →</Link>
+        </div>
       </div>
     </article>
   );
@@ -39,89 +71,115 @@ function ProjectCard({ project, index }) {
 
 function Projects() {
   const root = useRef(null);
+  const searchRef = useRef(null);
   const [search, setSearch] = useState('');
   const [vertical, setVertical] = useState('all');
   const { content, loading, error } = useContent();
+  const projects = content.projects;
+
+  // "/" focuses search, like most dev tools.
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === '/' && !e.target.closest?.('input, textarea, select')) {
+        e.preventDefault();
+        searchRef.current?.focus();
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
+  const counts = useMemo(() => {
+    const c = { all: projects.length };
+    VERTICALS.forEach((v) => { c[v.id] = projects.filter((p) => p.vertical === v.id).length; });
+    return c;
+  }, [projects]);
 
   const query = search.trim().toLowerCase();
-  const filtered = content.projects.filter((p) => {
-    const text = [p.name, p.description, p.verticalLabel, ...p.tags].join(' ').toLowerCase();
-    return text.includes(query) && (vertical === 'all' || p.vertical === vertical);
-  });
-  const resultKey = filtered.map((p) => p.id).join('|');
+  const filtered = projects
+    .map((p, i) => ({ p, i }))
+    .filter(({ p }) => {
+      const text = [p.name, p.description, p.verticalLabel, ...p.tags].join(' ').toLowerCase();
+      return text.includes(query) && (vertical === 'all' || p.vertical === vertical);
+    });
+  const resultKey = filtered.map(({ p }) => p.id).join('|');
 
   useGSAP(() => {
-    if (prefersReduced()) return;
-    gsap.from('.projects-header > *', {
-      y: 40, opacity: 0, stagger: 0.1, duration: 0.9, ease: 'power3.out',
-    });
-    gsap.from('.project-controls', {
-      y: 30, opacity: 0, duration: 0.8, delay: 0.3, ease: 'power3.out',
-    });
-  }, { scope: root });
-
-  useGSAP(() => {
-    if (prefersReduced()) return;
-    gsap.from('.listing-card', {
-      y: 40, opacity: 0, stagger: 0.08, duration: 0.7, ease: 'power3.out',
+    gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', () => {
+      gsap.from('.pcard', { y: 40, opacity: 0, stagger: 0.07, duration: 0.8, ease: 'power3.out' });
     });
   }, { scope: root, dependencies: [resultKey] });
 
+  const live = projects.length;
+
   return (
-    <div className="projects-page" ref={root}>
-      <header className="projects-header">
-        <div className="page-topbar">
-          <Link to="/" className="back-link">← Home</Link>
-          <span className="page-crumb">~/coding-club/projects</span>
-        </div>
-        <p className="eyebrow">{'//'} showcase</p>
-        <h1 className="projects-title">
-          Our projects from{' '}
-          <span className="accent-text">
-            <TextType
-              as="span"
-              text={PROJECT_WORDS}
-              typingSpeed={60}
-              pauseDuration={1500}
-              deletingSpeed={80}
-              deleteMode="backspace"
-              typeEffect="fade"
-              mistakes={0}
-              cursorStyle="underscore"
-              cursorGlide
-              showCursor
-              cursorColor="#f50000"
-              cursorBlinkDuration={0.5}
+    <main className="site page projects-page" ref={root}>
+      <PageHero
+        sheet="Sheet 02 · U2–U4"
+        crumb={[{ label: 'projects' }]}
+        kicker="The Foundry · Things we shipped"
+        title={<>Built by <em>members</em>, used on campus.</>}
+        lede="Every project here was designed, argued over, debugged at 3 am and shipped by Coding Club members across our verticals."
+        stats={[
+          { value: loading ? '—' : projects.length, label: 'projects' },
+          { value: loading ? '—' : live, label: 'live right now' },
+          { value: VERTICALS.length, label: 'verticals' },
+        ]}
+        part="ram"
+        refdes="U2–U4 · DDR5 MODULE"
+      />
+
+      <section className="page-body">
+        <div className="pfilter" role="search">
+          <label className="pfilter__search">
+            <span aria-hidden="true">&gt;_</span>
+            <input
+              ref={searchRef}
+              type="search"
+              placeholder="grep projects..."
+              aria-label="Search projects"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
             />
-          </span>
-        </h1>
-      </header>
-      <main className="projects-main">
-        <div className="project-controls">
-          <input
-            type="search" placeholder="search projects..." aria-label="Search projects"
-            value={search} onChange={(e) => setSearch(e.target.value)}
-          />
-          <select aria-label="Filter by vertical" value={vertical} onChange={(e) => setVertical(e.target.value)}>
-            <option value="all">All Verticals</option>
-            <option value="webdev">WebDev</option>
-            <option value="ai-ml">AI / ML</option>
-            <option value="gamedev">GameDev</option>
-          </select>
+            <kbd aria-hidden="true">/</kbd>
+          </label>
+          <div className="pfilter__chips" role="group" aria-label="Filter by vertical">
+            {FILTERS.map((f) => (
+              <button
+                key={f.id}
+                type="button"
+                className={vertical === f.id ? 'is-active' : ''}
+                aria-pressed={vertical === f.id}
+                onClick={() => setVertical(f.id)}
+              >
+                {f.name}<b>{counts[f.id] ?? 0}</b>
+              </button>
+            ))}
+          </div>
         </div>
-        <p className="result-count">showing <b>{filtered.length}</b> / {content.projects.length}</p>
-        {loading && <p className="result-count">Loading projects...</p>}
+
+        <p className="pfilter__count" aria-live="polite">
+          <span>$ ls ./projects{vertical !== 'all' ? ` --vertical=${vertical}` : ''}{query ? ` | grep "${query}"` : ''}</span>
+          <b>{filtered.length}</b> result{filtered.length === 1 ? '' : 's'}
+        </p>
+
+        {loading && <div className="pgrid">{[0, 1, 2].map((k) => <div key={k} className="pcard pcard--ghost" />)}</div>}
         {error && <p role="alert" className="result-count">{error}</p>}
-        <section className="project-grid">
-          {filtered.map((project, i) => <ProjectCard key={project.id} project={project} index={i} />)}
-          {!loading && !error && filtered.length === 0 && (
-            <p className="empty-projects">
-              No projects match your search. <span>{'//'} try another keyword</span>
-            </p>
-          )}
-        </section>
-      </main>
-    </div>
+
+        {!loading && !error && (
+          <div className="pgrid">
+            {filtered.map(({ p, i }) => <ProjectCard key={p.id} project={p} index={i} />)}
+            {filtered.length === 0 && (
+              <div className="pempty">
+                <p><b>0 results.</b> No project matches “{search || vertical}”.</p>
+                <button type="button" className="pcard__link" onClick={() => { setSearch(''); setVertical('all'); }}>Clear filters ↺</button>
+              </div>
+            )}
+            <PitchCard />
+          </div>
+        )}
+      </section>
+    </main>
   );
 }
 
