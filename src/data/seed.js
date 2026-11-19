@@ -41,7 +41,7 @@ export const SEED = {
       description: 'The club arcade for OASIS 2026: Minesweeper, Snake, Tetris, Wordle, Pac-Man and Flappy Bird in the browser, with tracked game sessions and live leaderboards. A React frontend over a Django backend, with a dedicated Celery queue per game, PostgreSQL and RabbitMQ.',
       image: '/media/cc-arcade.jpg',
       liveUrl: '',
-      sourceUrl: 'https://github.com/CodingClubOasisProject2026/coding-club-arcade',
+      sourceUrl: '',
     },
     {
       id: 'inter-bhawan-cc',
@@ -54,18 +54,6 @@ export const SEED = {
       image: '/media/inter-bhawan.jpg',
       liveUrl: '',
       sourceUrl: '',
-    },
-    {
-      id: 'swd-portal',
-      slug: 'swd-portal',
-      name: 'SWD Portal',
-      vertical: 'webdev',
-      verticalLabel: 'WebDev Vertical',
-      tags: ['React', 'Vite', 'JavaScript', 'CSS'],
-      description: 'A redesigned Student Welfare Division portal for BITS Pilani: a login with BITS ID and CAPTCHA, and a dashboard that brings the profile, dues, certificates, scholarships, travel concession, clubs, ID card and MCN / SAF forms into one place.',
-      image: '/media/swd-portal.jpg',
-      liveUrl: '',
-      sourceUrl: 'https://github.com/devillish404/swd',
     },
     {
       id: 'railway-to-rome',
